@@ -56,7 +56,7 @@ export default function PaymentsPage() {
           <StatCard title="Mobile Money" value={formatCurrency(stats.mobileTotal)} icon={Smartphone} iconBg="bg-blue-50 dark:bg-blue-950/30" iconColor="text-blue-600" />
         </div>
 
-        <div className="grid gap-4 lg:grid-cols-3">
+        <div className="grid gap-4 lg:grid-cols-1">
           <div className="lg:col-span-2 space-y-4">
             {/* Filters */}
             <div className="flex gap-3">
@@ -156,9 +156,9 @@ export default function PaymentsPage() {
           </div>
 
           {/* Chart */}
-          <div>
+          {/* <div>
             <PaymentMethodChart />
-          </div>
+          </div> */}
         </div>
       </div>
     </DashboardLayout>
