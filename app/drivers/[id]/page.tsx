@@ -1,7 +1,6 @@
 'use client';
 
-import { use } from 'react';
-import { notFound } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { DashboardLayout } from '@/components/layout/dashboard-layout';
 import { StatusBadge } from '@/components/ui/status-badge';
@@ -11,10 +10,11 @@ import { ArrowLeft, Star, Car, FileText, CheckCircle, XCircle, PauseCircle } fro
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 
-export default function DriverProfilePage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params);
+export default function DriverProfilePage() {
+  const params = useParams();
+  const id = Array.isArray(params?.id) ? params.id[0] : params?.id;
   const driver = drivers.find((d) => d.id === id);
-  if (!driver) notFound();
+  if (!driver) return <div className="p-5 text-center text-muted-foreground">Chauffeur non trouvé</div>;
 
   const driverRides = rides.filter((r) => r.driverId === driver.id).slice(0, 20);
 
