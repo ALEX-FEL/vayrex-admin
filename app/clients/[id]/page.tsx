@@ -1,28 +1,35 @@
-import { notFound } from 'next/navigation';
+'use client';
+
+import { useMemo } from 'react';
 import Link from 'next/link';
 import { DashboardLayout } from '@/components/layout/dashboard-layout';
 import { StatusBadge } from '@/components/ui/status-badge';
-import { getClient, getRidesByClient } from '@/lib/db';
+import { clients, rides } from '@/lib/mock-data';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, PauseCircle } from 'lucide-react';
 import { format } from 'date-fns';
-import { ClientRidesTable } from './rides-table';
+import { fr } from 'date-fns/locale';
 
-export const dynamic = 'force-dynamic';
+const formatCurrency = (amount: number) =>
+  new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'XOF', maximumFractionDigits: 0 }).format(amount);
 
 interface PageProps {
   params: { id: string };
 }
 
-export default async function ClientProfilePage({ params }: PageProps) {
-  const { id } = params;
-  const client = await getClient(id);
-  if (!client) notFound();
+export default function ClientProfilePage({ params }: PageProps) {
+  const client = useMemo(() => clients.find((c) => c.id === params.id), [params.id]);
+  const clientRides = useMemo(() => rides.filter((r) => r.clientId === params.id).slice(0, 50), [params.id]);
 
-  const rides = await getRidesByClient(client.id);
-
-  const formatCurrency = (amount: number) =>
-    new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'XOF', maximumFractionDigits: 0 }).format(amount);
+  if (!client) {
+    return (
+      <DashboardLayout>
+        <div className="flex flex-col items-center justify-center min-h-[400px]">
+          <p className="text-muted-foreground">Client non trouvé</p>
+        </div>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout>
@@ -39,8 +46,8 @@ export default async function ClientProfilePage({ params }: PageProps) {
         <div className="grid gap-4 lg:grid-cols-3">
           <div className="space-y-4">
             <div className="rounded-xl border border-border bg-card p-5 text-center shadow-sm">
-              <img src={client.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${client.first_name}`} alt={client.first_name} className="mx-auto h-20 w-20 rounded-full bg-muted object-cover" />
-              <h2 className="mt-3 text-base font-bold">{client.first_name} {client.last_name}</h2>
+              <img src={client.avatar} alt={client.firstName} className="mx-auto h-20 w-20 rounded-full bg-muted object-cover" />
+              <h2 className="mt-3 text-base font-bold">{client.firstName} {client.lastName}</h2>
               <p className="text-sm text-muted-foreground">{client.phone}</p>
               <p className="text-xs text-muted-foreground">{client.email}</p>
               <div className="mt-3"><StatusBadge status={client.status} /></div>
@@ -57,15 +64,15 @@ export default async function ClientProfilePage({ params }: PageProps) {
               <div className="space-y-2.5">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Total courses</span>
-                  <span className="font-semibold">{client.total_rides}</span>
+                  <span className="font-semibold">{client.totalRides}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Montant total</span>
-                  <span className="font-semibold text-xs">{formatCurrency(client.total_spent)}</span>
+                  <span className="font-semibold text-xs">{formatCurrency(client.totalSpent)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Inscrit le</span>
-                  <span className="font-medium text-xs">{format(new Date(client.created_at), 'dd/MM/yyyy')}</span>
+                  <span className="font-medium text-xs">{format(client.createdAt, 'dd/MM/yyyy', { locale: fr })}</span>
                 </div>
               </div>
             </div>
@@ -73,8 +80,30 @@ export default async function ClientProfilePage({ params }: PageProps) {
 
           <div className="lg:col-span-2">
             <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
-              <h3 className="mb-4 text-sm font-semibold">Historique des courses ({rides.length})</h3>
-              <ClientRidesTable rides={rides} />
+              <h3 className="mb-4 text-sm font-semibold">Historique des courses ({clientRides.length})</h3>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-border">
+                      {['Réf.', 'Chauffeur', 'Destination', 'Prix', 'Date', 'Statut'].map((h) => (
+                        <th key={h} className="pb-2 pr-4 text-left text-xs font-medium text-muted-foreground whitespace-nowrap">{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border">
+                    {clientRides.map((ride) => (
+                      <tr key={ride.id} className="hover:bg-muted/30">
+                        <td className="py-2.5 pr-4 font-mono text-xs text-primary">{ride.reference}</td>
+                        <td className="py-2.5 pr-4 text-xs text-muted-foreground whitespace-nowrap">{ride.driverName ?? '—'}</td>
+                        <td className="py-2.5 pr-4 text-xs text-muted-foreground max-w-[140px] truncate">{ride.destination}</td>
+                        <td className="py-2.5 pr-4 text-xs font-semibold whitespace-nowrap">{formatCurrency(ride.price)}</td>
+                        <td className="py-2.5 pr-4 text-xs text-muted-foreground whitespace-nowrap">{format(ride.createdAt, 'dd/MM/yy', { locale: fr })}</td>
+                        <td className="py-2.5"><StatusBadge status={ride.status} /></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>

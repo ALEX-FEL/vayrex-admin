@@ -1,3 +1,5 @@
+'use client';
+
 import { DashboardLayout } from '@/components/layout/dashboard-layout';
 import { StatCard } from '@/components/ui/stat-card';
 import { StatusBadge } from '@/components/ui/status-badge';
@@ -6,25 +8,21 @@ import { VehicleDistributionChart } from '@/components/charts/vehicle-distributi
 import { RideStatusChart } from '@/components/charts/ride-status-chart';
 import {
   getDashboardStats,
-  getRides,
+  getRecentActivity,
   getMonthlyRidesData,
   getVehicleTypeDistribution,
   getRideStatusDistribution,
-} from '@/lib/db';
+} from '@/lib/mock-data';
 import { Users, UserCheck, Car, CreditCard, CheckCircle, XCircle, Activity } from 'lucide-react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 
-export const dynamic = 'force-dynamic';
-
-export default async function DashboardPage() {
-  const [stats, recentRides, monthlyData, vehicleDist, statusDist] = await Promise.all([
-    getDashboardStats(),
-    getRides(10),
-    getMonthlyRidesData(),
-    getVehicleTypeDistribution(),
-    getRideStatusDistribution(),
-  ]);
+export default function DashboardPage() {
+  const stats = getDashboardStats();
+  const recentRides = getRecentActivity(10);
+  const monthlyData = getMonthlyRidesData();
+  const vehicleDist = getVehicleTypeDistribution();
+  const statusDist = getRideStatusDistribution();
 
   const formatCurrency = (amount: number) =>
     new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'XOF', maximumFractionDigits: 0 }).format(amount);
@@ -72,9 +70,9 @@ export default async function DashboardPage() {
                 <tbody className="divide-y divide-border">
                   {recentRides.map((ride) => (
                     <tr key={ride.id} className="hover:bg-muted/40 transition-colors">
-                      <td className="py-2.5 pr-4 text-xs text-muted-foreground whitespace-nowrap">{format(new Date(ride.created_at), 'HH:mm', { locale: fr })}</td>
-                      <td className="py-2.5 pr-4 font-medium text-xs whitespace-nowrap">{ride.client_name}</td>
-                      <td className="py-2.5 pr-4 text-xs text-muted-foreground whitespace-nowrap">{ride.driver_name ?? '—'}</td>
+                      <td className="py-2.5 pr-4 text-xs text-muted-foreground whitespace-nowrap">{format(ride.createdAt, 'HH:mm', { locale: fr })}</td>
+                      <td className="py-2.5 pr-4 font-medium text-xs whitespace-nowrap">{ride.clientName}</td>
+                      <td className="py-2.5 pr-4 text-xs text-muted-foreground whitespace-nowrap">{ride.driverName ?? '—'}</td>
                       <td className="py-2.5 pr-4 text-xs text-muted-foreground max-w-[140px] truncate">{ride.destination}</td>
                       <td className="py-2.5 pr-4 text-xs font-semibold whitespace-nowrap">{formatCurrency(ride.price)}</td>
                       <td className="py-2.5"><StatusBadge status={ride.status} /></td>
