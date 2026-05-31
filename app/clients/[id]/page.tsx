@@ -1,7 +1,6 @@
 'use client';
 
-import { use } from 'react';
-import { notFound } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { DashboardLayout } from '@/components/layout/dashboard-layout';
 import { StatusBadge } from '@/components/ui/status-badge';
@@ -11,10 +10,11 @@ import { ArrowLeft, PauseCircle } from 'lucide-react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 
-export default function ClientProfilePage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params);
+export default function ClientProfilePage() {
+  const params = useParams();
+  const id = Array.isArray(params?.id) ? params.id[0] : params?.id;
   const client = clients.find((c) => c.id === id);
-  if (!client) notFound();
+  if (!client) return <div className="p-5 text-center text-muted-foreground">Client non trouvé</div>;
 
   const clientRides = rides.filter((r) => r.clientId === client.id).slice(0, 20);
   const totalSpent = clientRides
