@@ -1,14 +1,13 @@
 'use client';
 
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
+import { getPaymentMethodDistribution } from '@/lib/mock-data';
 
 const COLORS = ['hsl(var(--chart-3))', 'hsl(var(--chart-1))'];
 
-interface PaymentMethodChartProps {
-  data: { name: string; value: number }[];
-}
+export function PaymentMethodChart() {
+  const data = getPaymentMethodDistribution();
 
-export function PaymentMethodChart({ data }: PaymentMethodChartProps) {
   return (
     <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
       <h3 className="mb-4 text-sm font-semibold text-foreground">Répartition des paiements</h3>
