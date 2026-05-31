@@ -1,7 +1,6 @@
 'use client';
 
-import { use } from 'react';
-import { notFound } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { DashboardLayout } from '@/components/layout/dashboard-layout';
 import { StatusBadge } from '@/components/ui/status-badge';
@@ -43,10 +42,11 @@ const statusOrder: Record<RideStatus, number> = {
   ANNULÉE: -1,
 };
 
-export default function CourseDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params);
+export default function CourseDetailPage() {
+  const params = useParams();
+  const id = Array.isArray(params?.id) ? params.id[0] : params?.id;
   const ride = rides.find((r) => r.id === id);
-  if (!ride) notFound();
+  if (!ride) return <div className="p-5 text-center text-muted-foreground">Course non trouvée</div>;
 
   const formatCurrency = (amount: number) =>
     new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'XOF', maximumFractionDigits: 0 }).format(amount);
