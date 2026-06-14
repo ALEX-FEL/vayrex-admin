@@ -1,12 +1,22 @@
 'use client';
 
+import { useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { DashboardLayout } from '@/components/layout/dashboard-layout';
 import { StatusBadge } from '@/components/ui/status-badge';
 import { clients, rides } from '@/lib/mock-data';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, PauseCircle } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { ArrowLeft, CirclePause as PauseCircle } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from '@/components/ui/dialog';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 
@@ -14,15 +24,26 @@ export default function ClientProfilePage() {
   const params = useParams();
   const id = Array.isArray(params?.id) ? params.id[0] : params?.id;
   const client = clients.find((c) => c.id === id);
-  if (!client) return <div className="p-5 text-center text-muted-foreground">Client non trouvé</div>;
+  const [clientData, setClientData] = useState(client);
+  const [motif, setMotif] = useState('');
+  const [showMotifDialog, setShowMotifDialog] = useState(false);
 
-  const clientRides = rides.filter((r) => r.clientId === client.id).slice(0, 20);
-  const totalSpent = clientRides
-    .filter((r) => r.status === 'TERMINÉE')
-    .reduce((sum, r) => sum + r.price, 0);
+  if (!clientData) return <div className="p-5 text-center text-muted-foreground">Client non trouvé</div>;
+
+  const clientRides = rides.filter((r) => r.clientId === clientData.id).slice(0, 20);
 
   const formatCurrency = (amount: number) =>
     new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'XOF', maximumFractionDigits: 0 }).format(amount);
+
+  const handleSuspend = () => {
+    if (!motif.trim()) return;
+    setClientData((prev) => {
+      if (!prev) return prev;
+      return { ...prev, status: 'SUSPENDU' as const, motif };
+    });
+    setMotif('');
+    setShowMotifDialog(false);
+  };
 
   return (
     <DashboardLayout>
@@ -40,15 +61,20 @@ export default function ClientProfilePage() {
           {/* Profile */}
           <div className="space-y-4">
             <div className="rounded-xl border border-border bg-card p-5 text-center shadow-sm">
-              <img src={client.avatar} alt={client.firstName} className="mx-auto h-20 w-20 rounded-full bg-muted object-cover" />
-              <h2 className="mt-3 text-base font-bold">{client.firstName} {client.lastName}</h2>
-              <p className="text-sm text-muted-foreground">{client.phone}</p>
-              <p className="text-xs text-muted-foreground">{client.email}</p>
+              <img src={clientData.avatar} alt={clientData.firstName} className="mx-auto h-20 w-20 rounded-full bg-muted object-cover" />
+              <h2 className="mt-3 text-base font-bold">{clientData.firstName} {clientData.lastName}</h2>
+              <p className="text-sm text-muted-foreground">{clientData.phone}</p>
+              <p className="text-xs text-muted-foreground">{clientData.email}</p>
               <div className="mt-3">
-                <StatusBadge status={client.status} />
+                <StatusBadge status={clientData.status} />
               </div>
-              {client.status === 'ACTIF' && (
-                <Button variant="outline" size="sm" className="mt-4 gap-1.5 text-amber-600 border-amber-300 w-full">
+              {clientData.motif && (
+                <div className="mt-2 rounded-md bg-destructive/10 border border-destructive/20 px-3 py-2 text-xs text-destructive">
+                  Motif : {clientData.motif}
+                </div>
+              )}
+              {clientData.status === 'ACTIF' && (
+                <Button variant="outline" size="sm" className="mt-4 gap-1.5 text-amber-600 border-amber-300 w-full" onClick={() => setShowMotifDialog(true)}>
                   <PauseCircle className="h-3.5 w-3.5" />
                   Suspendre
                 </Button>
@@ -60,15 +86,15 @@ export default function ClientProfilePage() {
               <div className="space-y-2.5">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Total courses</span>
-                  <span className="font-semibold">{client.totalRides}</span>
+                  <span className="font-semibold">{clientData.totalRides}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Montant total</span>
-                  <span className="font-semibold text-xs">{formatCurrency(client.totalSpent)}</span>
+                  <span className="font-semibold text-xs">{formatCurrency(clientData.totalSpent)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Inscrit le</span>
-                  <span className="font-medium text-xs">{format(client.createdAt, 'dd/MM/yyyy', { locale: fr })}</span>
+                  <span className="font-medium text-xs">{format(clientData.createdAt, 'dd/MM/yyyy', { locale: fr })}</span>
                 </div>
               </div>
             </div>
@@ -113,6 +139,36 @@ export default function ClientProfilePage() {
           </div>
         </div>
       </div>
+
+      {/* Motif Dialog */}
+      <Dialog open={showMotifDialog} onOpenChange={(open) => { if (!open) { setShowMotifDialog(false); setMotif(''); } }}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Suspendre le client</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3 py-2">
+            <div className="space-y-1.5">
+              <Label className="text-xs">Motif de suspension</Label>
+              <Input
+                placeholder="Entrez le motif..."
+                value={motif}
+                onChange={(e) => setMotif(e.target.value)}
+                className="h-9 text-sm"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => { setShowMotifDialog(false); setMotif(''); }}>Annuler</Button>
+            <Button
+              variant="destructive"
+              onClick={handleSuspend}
+              disabled={!motif.trim()}
+            >
+              Suspendre
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </DashboardLayout>
   );
 }

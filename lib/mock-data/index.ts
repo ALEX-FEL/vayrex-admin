@@ -1,7 +1,10 @@
 import { faker } from '@faker-js/faker/locale/fr';
 import type {
+  CancellationSource,
   Client,
+  DocumentVerificationStatus,
   Driver,
+  DriverDocument,
   DriverStatus,
   Payment,
   PaymentMethod,
@@ -80,6 +83,7 @@ export const clients: Client[] = Array.from({ length: 50 }, (_, i) => {
       { weight: 85, value: 'ACTIF' as const },
       { weight: 15, value: 'SUSPENDU' as const },
     ]),
+    motif: undefined,
     createdAt: faker.date.between({ from: '2023-01-01', to: '2024-12-01' }),
   };
 });
@@ -93,6 +97,46 @@ export const drivers: Driver[] = Array.from({ length: 30 }, (_, i) => {
   const firstName = faker.person.firstName('male');
   const lastName = faker.person.lastName();
   const vType = faker.helpers.arrayElement(vehicleTypeNames);
+  const idCardNumber = `CNI-${faker.string.alphanumeric(10).toUpperCase()}`;
+  const licenseNumber = `PER-${faker.string.alphanumeric(8).toUpperCase()}`;
+  const vehiclePlate = `AB ${faker.number.int({ min: 1000, max: 9999 })} ${faker.helpers.arrayElement(['CI', 'AB', 'CD'])}`;
+
+  const docs: DriverDocument[] = [
+    {
+      id: `doc-${i + 1}-1`,
+      label: "Carte nationale d'identité",
+      value: idCardNumber,
+      fileUrl: `/uploads/cni_${idCardNumber}.pdf`,
+      verificationStatus: faker.helpers.weightedArrayElement([
+        { weight: 60, value: 'VÉRIFIÉ' as DocumentVerificationStatus },
+        { weight: 30, value: 'EN_ATTENTE' as DocumentVerificationStatus },
+        { weight: 10, value: 'REFUSÉ' as DocumentVerificationStatus },
+      ]),
+    },
+    {
+      id: `doc-${i + 1}-2`,
+      label: 'Permis de conduire',
+      value: licenseNumber,
+      fileUrl: `/uploads/permis_${licenseNumber}.pdf`,
+      verificationStatus: faker.helpers.weightedArrayElement([
+        { weight: 60, value: 'VÉRIFIÉ' as DocumentVerificationStatus },
+        { weight: 30, value: 'EN_ATTENTE' as DocumentVerificationStatus },
+        { weight: 10, value: 'REFUSÉ' as DocumentVerificationStatus },
+      ]),
+    },
+    {
+      id: `doc-${i + 1}-3`,
+      label: 'Carte grise',
+      value: `CG-${vehiclePlate.replace(/\s/g, '')}`,
+      fileUrl: `/uploads/cg_${vehiclePlate.replace(/\s/g, '')}.pdf`,
+      verificationStatus: faker.helpers.weightedArrayElement([
+        { weight: 60, value: 'VÉRIFIÉ' as DocumentVerificationStatus },
+        { weight: 30, value: 'EN_ATTENTE' as DocumentVerificationStatus },
+        { weight: 10, value: 'REFUSÉ' as DocumentVerificationStatus },
+      ]),
+    },
+  ];
+
   return {
     id: `driver-${i + 1}`,
     firstName,
@@ -103,9 +147,10 @@ export const drivers: Driver[] = Array.from({ length: 30 }, (_, i) => {
     vehicleType: vType,
     vehicleBrand: faker.helpers.arrayElement(vehicleBrands),
     vehicleColor: faker.helpers.arrayElement(vehicleColors),
-    vehiclePlate: `AB ${faker.number.int({ min: 1000, max: 9999 })} ${faker.helpers.arrayElement(['CI', 'AB', 'CD'])}`,
-    licenseNumber: `PER-${faker.string.alphanumeric(8).toUpperCase()}`,
-    idCardNumber: `CNI-${faker.string.alphanumeric(10).toUpperCase()}`,
+    vehiclePlate,
+    licenseNumber,
+    idCardNumber,
+    documents: docs,
     totalRides: faker.number.int({ min: 0, max: 500 }),
     rating: parseFloat(faker.number.float({ min: 3.5, max: 5, fractionDigits: 1 }).toFixed(1)),
     status: faker.helpers.weightedArrayElement([
@@ -114,6 +159,7 @@ export const drivers: Driver[] = Array.from({ length: 30 }, (_, i) => {
       { weight: 10, value: 'REFUSÉ' as const },
       { weight: 10, value: 'SUSPENDU' as const },
     ]),
+    motif: undefined,
     isOnline: faker.datatype.boolean({ probability: 0.4 }),
     createdAt: faker.date.between({ from: '2023-01-01', to: '2024-12-01' }),
   };
@@ -185,6 +231,15 @@ export const rides: Ride[] = Array.from({ length: 300 }, (_, i) => {
     price: Math.round(price),
     paymentMethod: faker.helpers.arrayElement(['CASH', 'MOBILE_MONEY'] as PaymentMethod[]),
     status,
+    cancelledBy: status === 'ANNULÉE' ? faker.helpers.arrayElement(['CLIENT', 'CHAUFFEUR'] as CancellationSource[]) : undefined,
+    cancellationReason: status === 'ANNULÉE' ? faker.helpers.arrayElement([
+      'Chauffeur en retard',
+      'Annulation par erreur',
+      'Itinéraire trop long',
+      'Prix trop élevé',
+      'Véhicule non conforme',
+      'Client injoignable',
+    ]) : undefined,
     createdAt,
     updatedAt: new Date(createdAt.getTime() + faker.number.int({ min: 600000, max: 3600000 })),
   };

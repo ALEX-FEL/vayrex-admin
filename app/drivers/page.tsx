@@ -3,24 +3,38 @@
 import { useState, useMemo } from 'react';
 import { DashboardLayout } from '@/components/layout/dashboard-layout';
 import { StatusBadge } from '@/components/ui/status-badge';
+import { ColumnVisibility, useColumnVisibility } from '@/components/ui/column-visibility';
 import { drivers } from '@/lib/mock-data';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import {
-  Search, Eye, CheckCircle, XCircle, PauseCircle, ChevronLeft, ChevronRight, Star
-} from 'lucide-react';
+import { Search, Eye, CircleCheck as CheckCircle, Circle as XCircle, CirclePause as PauseCircle, ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import Link from 'next/link';
-import type { DriverStatus } from '@/types';
 
 const PAGE_SIZE = 12;
+
+const columnDefs = [
+  { key: 'driver', label: 'Chauffeur' },
+  { key: 'phone', label: 'Téléphone' },
+  { key: 'vehicle', label: 'Véhicule' },
+  { key: 'plate', label: 'Immatriculation' },
+  { key: 'rating', label: 'Note' },
+  { key: 'date', label: 'Date inscription' },
+  { key: 'status', label: 'Statut' },
+  { key: 'online', label: 'En ligne' },
+  { key: 'actions', label: 'Actions' },
+];
 
 export default function DriversPage() {
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('ALL');
   const [page, setPage] = useState(1);
+  const { toggleColumn, isVisible } = useColumnVisibility(
+    columnDefs.map((c) => c.key),
+    ['online', 'status', 'actions']
+  );
 
   const filtered = useMemo(() => {
     return drivers.filter((d) => {
@@ -43,7 +57,7 @@ export default function DriversPage() {
         </div>
 
         {/* Filters */}
-        <div className="flex gap-3">
+        <div className="flex gap-3 items-center">
           <div className="relative flex-1 max-w-sm">
             <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
             <Input
@@ -65,6 +79,7 @@ export default function DriversPage() {
               <SelectItem value="SUSPENDU">Suspendu</SelectItem>
             </SelectContent>
           </Select>
+          <ColumnVisibility columns={columnDefs} visibleColumns={Object.fromEntries(columnDefs.map((c) => [c.key, isVisible(c.key)]))} onToggle={toggleColumn} />
         </div>
 
         {/* Table */}
@@ -73,17 +88,21 @@ export default function DriversPage() {
             <table className="w-full text-sm">
               <thead className="border-b border-border bg-muted/40">
                 <tr>
-                  {['Chauffeur', 'Téléphone', 'Véhicule', 'Immatriculation', 'Note', 'Date inscription', 'Statut', 'En ligne', 'Actions'].map((h) => (
-                    <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">
-                      {h}
-                    </th>
-                  ))}
+                  {isVisible('driver') && <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">Chauffeur</th>}
+                  {isVisible('phone') && <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">Téléphone</th>}
+                  {isVisible('vehicle') && <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">Véhicule</th>}
+                  {isVisible('plate') && <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">Immatriculation</th>}
+                  {isVisible('rating') && <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">Note</th>}
+                  {isVisible('date') && <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">Date inscription</th>}
+                  {isVisible('status') && <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">Statut</th>}
+                  {isVisible('online') && <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">En ligne</th>}
+                  {isVisible('actions') && <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">Actions</th>}
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
                 {paginated.map((driver) => (
                   <tr key={driver.id} className="hover:bg-muted/30 transition-colors">
-                    <td className="px-4 py-3">
+                    {isVisible('driver') && <td className="px-4 py-3">
                       <div className="flex items-center gap-2.5">
                         <img
                           src={driver.avatar}
@@ -95,28 +114,28 @@ export default function DriversPage() {
                           <p className="text-[10px] text-muted-foreground">{driver.totalRides} courses</p>
                         </div>
                       </div>
-                    </td>
-                    <td className="px-4 py-3 text-xs text-muted-foreground whitespace-nowrap">{driver.phone}</td>
-                    <td className="px-4 py-3 text-xs">
+                    </td>}
+                    {isVisible('phone') && <td className="px-4 py-3 text-xs text-muted-foreground whitespace-nowrap">{driver.phone}</td>}
+                    {isVisible('vehicle') && <td className="px-4 py-3 text-xs">
                       <span className="rounded-md bg-muted px-2 py-0.5 text-xs font-medium">{driver.vehicleType}</span>
-                    </td>
-                    <td className="px-4 py-3 font-mono text-xs">{driver.vehiclePlate}</td>
-                    <td className="px-4 py-3">
+                    </td>}
+                    {isVisible('plate') && <td className="px-4 py-3 font-mono text-xs">{driver.vehiclePlate}</td>}
+                    {isVisible('rating') && <td className="px-4 py-3">
                       <div className="flex items-center gap-1">
                         <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
                         <span className="text-xs font-medium">{driver.rating}</span>
                       </div>
-                    </td>
-                    <td className="px-4 py-3 text-xs text-muted-foreground whitespace-nowrap">
+                    </td>}
+                    {isVisible('date') && <td className="px-4 py-3 text-xs text-muted-foreground whitespace-nowrap">
                       {format(driver.createdAt, 'dd/MM/yyyy', { locale: fr })}
-                    </td>
-                    <td className="px-4 py-3">
+                    </td>}
+                    {isVisible('status') && <td className="px-4 py-3">
                       <StatusBadge status={driver.status} />
-                    </td>
-                    <td className="px-4 py-3">
+                    </td>}
+                    {isVisible('online') && <td className="px-4 py-3">
                       <span className={`inline-flex h-2 w-2 rounded-full ${driver.isOnline ? 'bg-emerald-500' : 'bg-muted-foreground/30'}`} />
-                    </td>
-                    <td className="px-4 py-3">
+                    </td>}
+                    {isVisible('actions') && <td className="px-4 py-3">
                       <div className="flex items-center gap-1">
                         <Link href={`/drivers/${driver.id}`}>
                           <Button variant="ghost" size="icon" className="h-7 w-7">
@@ -139,7 +158,7 @@ export default function DriversPage() {
                           </Button>
                         )}
                       </div>
-                    </td>
+                    </td>}
                   </tr>
                 ))}
               </tbody>

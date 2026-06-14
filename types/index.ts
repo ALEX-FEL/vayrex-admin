@@ -15,6 +15,18 @@ export type PaymentStatus = 'PAYÉ' | 'EN_ATTENTE';
 
 export type PaymentMethod = 'CASH' | 'MOBILE_MONEY';
 
+export type DocumentVerificationStatus = 'EN_ATTENTE' | 'VÉRIFIÉ' | 'REFUSÉ';
+
+export type CancellationSource = 'CLIENT' | 'CHAUFFEUR';
+
+export interface DriverDocument {
+  id: string;
+  label: string;
+  value: string;
+  fileUrl: string;
+  verificationStatus: DocumentVerificationStatus;
+}
+
 export interface VehicleType {
   id: string;
   name: string;
@@ -39,6 +51,7 @@ export interface Client {
   totalRides: number;
   totalSpent: number;
   status: ClientStatus;
+  motif?: string;
   createdAt: Date;
 }
 
@@ -55,9 +68,11 @@ export interface Driver {
   vehiclePlate: string;
   licenseNumber: string;
   idCardNumber: string;
+  documents: DriverDocument[];
   totalRides: number;
   rating: number;
   status: DriverStatus;
+  motif?: string;
   isOnline: boolean;
   createdAt: Date;
 }
@@ -79,6 +94,8 @@ export interface Ride {
   price: number;
   paymentMethod: PaymentMethod;
   status: RideStatus;
+  cancelledBy?: CancellationSource;
+  cancellationReason?: string;
   createdAt: Date;
   updatedAt: Date;
 }
