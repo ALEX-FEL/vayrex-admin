@@ -8,10 +8,11 @@ import { drivers } from '@/lib/mock-data';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search, Eye, CircleCheck as CheckCircle, Circle as XCircle, CirclePause as PauseCircle, ChevronLeft, ChevronRight, Star } from 'lucide-react';
+import { Search, CircleCheck as CheckCircle, Circle as XCircle, CirclePause as PauseCircle, ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const PAGE_SIZE = 12;
 
@@ -28,6 +29,7 @@ const columnDefs = [
 ];
 
 export default function DriversPage() {
+  const router = useRouter();
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('ALL');
   const [page, setPage] = useState(1);
@@ -101,7 +103,7 @@ export default function DriversPage() {
               </thead>
               <tbody className="divide-y divide-border">
                 {paginated.map((driver) => (
-                  <tr key={driver.id} className="hover:bg-muted/30 transition-colors">
+                  <tr key={driver.id} className="hover:bg-muted/30 transition-colors cursor-pointer" onClick={() => router.push(`/drivers/${driver.id}`)}>
                     {isVisible('driver') && <td className="px-4 py-3">
                       <div className="flex items-center gap-2.5">
                         <img
@@ -135,13 +137,8 @@ export default function DriversPage() {
                     {isVisible('online') && <td className="px-4 py-3">
                       <span className={`inline-flex h-2 w-2 rounded-full ${driver.isOnline ? 'bg-emerald-500' : 'bg-muted-foreground/30'}`} />
                     </td>}
-                    {isVisible('actions') && <td className="px-4 py-3">
+                    {isVisible('actions') && <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
                       <div className="flex items-center gap-1">
-                        <Link href={`/drivers/${driver.id}`}>
-                          <Button variant="ghost" size="icon" className="h-7 w-7">
-                            <Eye className="h-3.5 w-3.5" />
-                          </Button>
-                        </Link>
                         {driver.status === 'EN_ATTENTE' && (
                           <>
                             <Button variant="ghost" size="icon" className="h-7 w-7 text-emerald-600 hover:text-emerald-700">

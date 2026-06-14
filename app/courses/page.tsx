@@ -8,10 +8,10 @@ import { rides } from '@/lib/mock-data';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search, Download, Eye, Circle as XCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, Download, Circle as XCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import type { RideStatus } from '@/types';
 
 const PAGE_SIZE = 15;
@@ -42,6 +42,7 @@ const columnDefs = [
 ];
 
 export default function CoursesPage() {
+  const router = useRouter();
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('ALL');
   const [page, setPage] = useState(1);
@@ -144,7 +145,7 @@ export default function CoursesPage() {
               </thead>
               <tbody className="divide-y divide-border">
                 {paginated.map((ride) => (
-                  <tr key={ride.id} className="hover:bg-muted/30 transition-colors">
+                  <tr key={ride.id} className="hover:bg-muted/30 transition-colors cursor-pointer" onClick={() => router.push(`/courses/${ride.id}`)}>
                     {isVisible('reference') && <td className="px-4 py-3 font-mono text-xs font-medium text-primary">{ride.reference}</td>}
                     {isVisible('client') && <td className="px-4 py-3 whitespace-nowrap font-medium text-xs">{ride.clientName}</td>}
                     {isVisible('driver') && <td className="px-4 py-3 text-xs text-muted-foreground whitespace-nowrap">{ride.driverName ?? '—'}</td>}
@@ -161,19 +162,12 @@ export default function CoursesPage() {
                     {isVisible('status') && <td className="px-4 py-3">
                       <StatusBadge status={ride.status} />
                     </td>}
-                    {isVisible('actions') && <td className="px-4 py-3">
-                      <div className="flex items-center gap-1">
-                        <Link href={`/courses/${ride.id}`}>
-                          <Button variant="ghost" size="icon" className="h-7 w-7">
-                            <Eye className="h-3.5 w-3.5" />
-                          </Button>
-                        </Link>
-                        {ride.status !== 'TERMINÉE' && ride.status !== 'ANNULÉE' && (
-                          <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive hover:text-destructive">
-                            <XCircle className="h-3.5 w-3.5" />
-                          </Button>
-                        )}
-                      </div>
+                    {isVisible('actions') && <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
+                      {ride.status !== 'TERMINÉE' && ride.status !== 'ANNULÉE' && (
+                        <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive hover:text-destructive">
+                          <XCircle className="h-3.5 w-3.5" />
+                        </Button>
+                      )}
                     </td>}
                   </tr>
                 ))}

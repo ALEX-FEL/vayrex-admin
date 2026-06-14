@@ -7,10 +7,10 @@ import { ColumnVisibility, useColumnVisibility } from '@/components/ui/column-vi
 import { clients } from '@/lib/mock-data';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Search, Eye, CirclePause as PauseCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, CirclePause as PauseCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const PAGE_SIZE = 15;
 
@@ -26,6 +26,7 @@ const columnDefs = [
 ];
 
 export default function ClientsPage() {
+  const router = useRouter();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const { toggleColumn, isVisible } = useColumnVisibility(
@@ -84,7 +85,7 @@ export default function ClientsPage() {
               </thead>
               <tbody className="divide-y divide-border">
                 {paginated.map((client) => (
-                  <tr key={client.id} className="hover:bg-muted/30 transition-colors">
+                  <tr key={client.id} className="hover:bg-muted/30 transition-colors cursor-pointer" onClick={() => router.push(`/clients/${client.id}`)}>
                     {isVisible('client') && <td className="px-4 py-3">
                       <div className="flex items-center gap-2.5">
                         <img src={client.avatar} alt={client.firstName} className="h-8 w-8 rounded-full bg-muted" />
@@ -101,19 +102,12 @@ export default function ClientsPage() {
                     {isVisible('status') && <td className="px-4 py-3">
                       <StatusBadge status={client.status} />
                     </td>}
-                    {isVisible('actions') && <td className="px-4 py-3">
-                      <div className="flex items-center gap-1">
-                        <Link href={`/clients/${client.id}`}>
-                          <Button variant="ghost" size="icon" className="h-7 w-7">
-                            <Eye className="h-3.5 w-3.5" />
-                          </Button>
-                        </Link>
-                        {client.status === 'ACTIF' && (
-                          <Button variant="ghost" size="icon" className="h-7 w-7 text-amber-600 hover:text-amber-700">
-                            <PauseCircle className="h-3.5 w-3.5" />
-                          </Button>
-                        )}
-                      </div>
+                    {isVisible('actions') && <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
+                      {client.status === 'ACTIF' && (
+                        <Button variant="ghost" size="icon" className="h-7 w-7 text-amber-600 hover:text-amber-700">
+                          <PauseCircle className="h-3.5 w-3.5" />
+                        </Button>
+                      )}
                     </td>}
                   </tr>
                 ))}
