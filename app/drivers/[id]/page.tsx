@@ -9,7 +9,7 @@ import { drivers, rides } from '@/lib/mock-data';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { ArrowLeft, Star, FileText, CircleCheck as CheckCircle, Circle as XCircle, CirclePause as PauseCircle, Download, ChevronDown } from 'lucide-react';
+import { ArrowLeft, Star, FileText, CircleCheck as CheckCircle, Circle as XCircle, CirclePause as PauseCircle, Download, ChevronDown, KeyRound, Check } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -36,6 +36,8 @@ export default function DriverProfilePage() {
   const [motifDialog, setMotifDialog] = useState<'suspend' | 'refuse' | null>(null);
   const [motif, setMotif] = useState('');
   const [openDocMenu, setOpenDocMenu] = useState<string | null>(null);
+  const [showResetDialog, setShowResetDialog] = useState(false);
+  const [resetDone, setResetDone] = useState(false);
 
   if (!driverData) return <div className="p-5 text-center text-muted-foreground">Chauffeur non trouvé</div>;
 
@@ -123,6 +125,10 @@ export default function DriverProfilePage() {
                     Suspendre
                   </Button>
                 )}
+                <Button size="sm" variant="outline" className="gap-1.5 w-full" onClick={() => { setShowResetDialog(true); setResetDone(false); }}>
+                  <KeyRound className="h-3.5 w-3.5" />
+                  Réinitialiser mot de passe
+                </Button>
               </div>
             </div>
 
@@ -331,6 +337,36 @@ export default function DriverProfilePage() {
               {motifDialog === 'suspend' ? 'Suspendre' : 'Refuser'}
             </Button>
           </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Reset Password Dialog */}
+      <Dialog open={showResetDialog} onOpenChange={setShowResetDialog}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Réinitialiser le mot de passe</DialogTitle>
+          </DialogHeader>
+          {resetDone ? (
+            <div className="flex flex-col items-center gap-3 py-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-950/30">
+                <Check className="h-6 w-6 text-emerald-600" />
+              </div>
+              <p className="text-sm text-center">Un email de réinitialisation a été envoyé à <span className="font-medium">{driverData.phone}</span></p>
+            </div>
+          ) : (
+            <>
+              <p className="text-sm text-muted-foreground py-2">
+                Voulez-vous réinitialiser le mot de passe de <span className="font-medium text-foreground">{driverData.firstName} {driverData.lastName}</span> ? Un email de réinitialisation sera envoyé.
+              </p>
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setShowResetDialog(false)}>Annuler</Button>
+                <Button onClick={() => setResetDone(true)} className="gap-1.5">
+                  <KeyRound className="h-3.5 w-3.5" />
+                  Réinitialiser
+                </Button>
+              </DialogFooter>
+            </>
+          )}
         </DialogContent>
       </Dialog>
     </DashboardLayout>

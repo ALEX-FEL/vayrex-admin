@@ -9,7 +9,7 @@ import { clients, rides } from '@/lib/mock-data';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { ArrowLeft, CirclePause as PauseCircle } from 'lucide-react';
+import { ArrowLeft, CirclePause as PauseCircle, KeyRound, Check } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -27,6 +27,8 @@ export default function ClientProfilePage() {
   const [clientData, setClientData] = useState(client);
   const [motif, setMotif] = useState('');
   const [showMotifDialog, setShowMotifDialog] = useState(false);
+  const [showResetDialog, setShowResetDialog] = useState(false);
+  const [resetDone, setResetDone] = useState(false);
 
   if (!clientData) return <div className="p-5 text-center text-muted-foreground">Client non trouvé</div>;
 
@@ -79,6 +81,10 @@ export default function ClientProfilePage() {
                   Suspendre
                 </Button>
               )}
+              <Button variant="outline" size="sm" className="mt-2 gap-1.5 w-full" onClick={() => { setShowResetDialog(true); setResetDone(false); }}>
+                <KeyRound className="h-3.5 w-3.5" />
+                Réinitialiser mot de passe
+              </Button>
             </div>
 
             <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
@@ -167,6 +173,36 @@ export default function ClientProfilePage() {
               Suspendre
             </Button>
           </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Reset Password Dialog */}
+      <Dialog open={showResetDialog} onOpenChange={setShowResetDialog}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Réinitialiser le mot de passe</DialogTitle>
+          </DialogHeader>
+          {resetDone ? (
+            <div className="flex flex-col items-center gap-3 py-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-950/30">
+                <Check className="h-6 w-6 text-emerald-600" />
+              </div>
+              <p className="text-sm text-center">Un email de réinitialisation a été envoyé à <span className="font-medium">{clientData.email}</span></p>
+            </div>
+          ) : (
+            <>
+              <p className="text-sm text-muted-foreground py-2">
+                Voulez-vous réinitialiser le mot de passe de <span className="font-medium text-foreground">{clientData.firstName} {clientData.lastName}</span> ? Un email de réinitialisation sera envoyé.
+              </p>
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setShowResetDialog(false)}>Annuler</Button>
+                <Button onClick={() => setResetDone(true)} className="gap-1.5">
+                  <KeyRound className="h-3.5 w-3.5" />
+                  Réinitialiser
+                </Button>
+              </DialogFooter>
+            </>
+          )}
         </DialogContent>
       </Dialog>
     </DashboardLayout>

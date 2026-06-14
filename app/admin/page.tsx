@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Plus, ShieldCheck, UserCog, Clock } from 'lucide-react';
+import { Plus, ShieldCheck, UserCog, Clock, KeyRound, Check } from 'lucide-react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import type { AdminRole, AdminUser } from '@/types';
@@ -35,6 +35,8 @@ export default function AdminPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [form, setForm] = useState({ firstName: '', lastName: '', email: '', role: 'GESTIONNAIRE' as AdminRole });
   const [tab, setTab] = useState('users');
+  const [resetTarget, setResetTarget] = useState<AdminUser | null>(null);
+  const [resetDone, setResetDone] = useState(false);
   const { toggleColumn, isVisible } = useColumnVisibility(
     columnDefs.map((c) => c.key),
     ['status', 'date', 'actions']
@@ -148,9 +150,20 @@ export default function AdminPage() {
                           )}
                           {isVisible('actions') && (
                             <td className="px-4 py-3">
-                              <Button variant="ghost" size="sm" className="h-7 text-xs" onClick={() => toggleActive(user.id)}>
-                                {user.isActive ? 'Désactiver' : 'Activer'}
-                              </Button>
+                              <div className="flex items-center gap-1">
+                                <Button variant="ghost" size="sm" className="h-7 text-xs" onClick={() => toggleActive(user.id)}>
+                                  {user.isActive ? 'Désactiver' : 'Activer'}
+                                </Button>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-7 w-7"
+                                  onClick={() => { setResetTarget(user); setResetDone(false); }}
+                                  title="Réinitialiser mot de passe"
+                                >
+                                  <KeyRound className="h-3.5 w-3.5" />
+                                </Button>
+                              </div>
                             </td>
                           )}
                         </tr>
@@ -248,6 +261,36 @@ export default function AdminPage() {
             <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Annuler</Button>
             <Button onClick={handleCreate} disabled={!form.firstName || !form.lastName || !form.email}>Créer</Button>
           </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Reset Password Dialog */}
+      <Dialog open={resetTarget !== null} onOpenChange={(open) => { if (!open) setResetTarget(null); }}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Réinitialiser le mot de passe</DialogTitle>
+          </DialogHeader>
+          {resetDone && resetTarget ? (
+            <div className="flex flex-col items-center gap-3 py-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-950/30">
+                <Check className="h-6 w-6 text-emerald-600" />
+              </div>
+              <p className="text-sm text-center">Un email de réinitialisation a été envoyé à <span className="font-medium">{resetTarget.email}</span></p>
+            </div>
+          ) : resetTarget ? (
+            <>
+              <p className="text-sm text-muted-foreground py-2">
+                Voulez-vous réinitialiser le mot de passe de <span className="font-medium text-foreground">{resetTarget.firstName} {resetTarget.lastName}</span> ? Un email de réinitialisation sera envoyé.
+              </p>
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setResetTarget(null)}>Annuler</Button>
+                <Button onClick={() => setResetDone(true)} className="gap-1.5">
+                  <KeyRound className="h-3.5 w-3.5" />
+                  Réinitialiser
+                </Button>
+              </DialogFooter>
+            </>
+          ) : null}
         </DialogContent>
       </Dialog>
     </DashboardLayout>
