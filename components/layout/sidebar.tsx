@@ -12,6 +12,8 @@ import {
   Settings,
   ChevronRight,
   Zap,
+  ShieldCheck,
+  MessageSquareWarning,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -23,6 +25,8 @@ const navItems = [
   { href: '/payments', label: 'Paiements', icon: CreditCard },
   { href: '/vehicle-types', label: 'Types de véhicules', icon: Truck },
   { href: '/pricing', label: 'Tarification', icon: Zap },
+  { href: '/tickets', label: 'Tickets', icon: MessageSquareWarning },
+  { href: '/admin', label: 'Administrateurs', icon: ShieldCheck },
   { href: '/settings', label: 'Paramètres', icon: Settings },
 ];
 

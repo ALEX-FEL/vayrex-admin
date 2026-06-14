@@ -114,6 +114,64 @@ export interface Payment {
   createdAt: Date;
 }
 
+export type AdminRole = 'ADMIN' | 'GESTIONNAIRE';
+
+export type TicketStatus = 'NON_LU' | 'LU' | 'RÉSOLU';
+
+export type NotificationType = 'DRIVER_PENDING' | 'HELP_REQUEST' | 'RIDE_CANCELLED' | 'TICKET_REPLY';
+
+export interface AdminUser {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: AdminRole;
+  isActive: boolean;
+  createdAt: Date;
+}
+
+export interface ActionHistory {
+  id: string;
+  userId: string;
+  userName: string;
+  action: string;
+  target: string;
+  targetId?: string;
+  createdAt: Date;
+}
+
+export interface TicketMessage {
+  id: string;
+  senderType: 'USER' | 'ADMIN';
+  senderName: string;
+  content: string;
+  createdAt: Date;
+}
+
+export interface Ticket {
+  id: string;
+  reference: string;
+  reporterId: string;
+  reporterName: string;
+  reporterType: 'CLIENT' | 'CHAUFFEUR';
+  subject: string;
+  status: TicketStatus;
+  messages: TicketMessage[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface Notification {
+  id: string;
+  type: NotificationType;
+  title: string;
+  description: string;
+  isRead: boolean;
+  link: string;
+  relatedId?: string;
+  createdAt: Date;
+}
+
 export interface PricingConfig {
   defaultMinimumPrice: number;
   baseCharge: number;

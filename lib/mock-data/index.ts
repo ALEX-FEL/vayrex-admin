@@ -1,16 +1,24 @@
 import { faker } from '@faker-js/faker/locale/fr';
 import type {
+  ActionHistory,
+  AdminRole,
+  AdminUser,
   CancellationSource,
   Client,
   DocumentVerificationStatus,
   Driver,
   DriverDocument,
   DriverStatus,
+  Notification,
+  NotificationType,
   Payment,
   PaymentMethod,
   PaymentStatus,
   Ride,
   RideStatus,
+  Ticket,
+  TicketMessage,
+  TicketStatus,
   VehicleType,
 } from '@/types';
 
@@ -360,3 +368,162 @@ export function getPaymentMethodDistribution() {
     { name: 'Mobile Money', value: mobile },
   ];
 }
+
+// Admin Users
+export const adminUsers: AdminUser[] = [
+  {
+    id: 'admin-1',
+    firstName: 'Amadou',
+    lastName: 'Koné',
+    email: 'amadou.kone@vayrix.com',
+    role: 'ADMIN',
+    isActive: true,
+    createdAt: new Date('2024-01-15'),
+  },
+  {
+    id: 'admin-2',
+    firstName: 'Fatou',
+    lastName: 'Diallo',
+    email: 'fatou.diallo@vayrix.com',
+    role: 'GESTIONNAIRE',
+    isActive: true,
+    createdAt: new Date('2024-03-20'),
+  },
+  {
+    id: 'admin-3',
+    firstName: 'Kouadio',
+    lastName: 'Yao',
+    email: 'kouadio.yao@vayrix.com',
+    role: 'GESTIONNAIRE',
+    isActive: true,
+    createdAt: new Date('2024-06-10'),
+  },
+  {
+    id: 'admin-4',
+    firstName: 'Marie',
+    lastName: 'Brou',
+    email: 'marie.brou@vayrix.com',
+    role: 'ADMIN',
+    isActive: false,
+    createdAt: new Date('2024-08-05'),
+  },
+];
+
+// Action History
+export const actionHistory: ActionHistory[] = [
+  { id: 'ah-1', userId: 'admin-1', userName: 'Amadou Koné', action: 'Approbation chauffeur', target: 'Ibrahim Touré', targetId: 'driver-3', createdAt: new Date('2025-01-28T09:15:00') },
+  { id: 'ah-2', userId: 'admin-2', userName: 'Fatou Diallo', action: 'Suspension client', target: 'Awa Camara', targetId: 'client-12', createdAt: new Date('2025-01-27T14:30:00') },
+  { id: 'ah-3', userId: 'admin-1', userName: 'Amadou Koné', action: 'Vérification document', target: 'Permis de conduire - Moussa Diarra', targetId: 'driver-7', createdAt: new Date('2025-01-27T11:00:00') },
+  { id: 'ah-4', userId: 'admin-3', userName: 'Kouadio Yao', action: 'Résolution ticket', target: 'TKT-0001', targetId: 'ticket-1', createdAt: new Date('2025-01-26T16:45:00') },
+  { id: 'ah-5', userId: 'admin-2', userName: 'Fatou Diallo', action: 'Refus chauffeur', target: 'Youssouf Coulibaly', targetId: 'driver-15', createdAt: new Date('2025-01-26T10:20:00') },
+  { id: 'ah-6', userId: 'admin-1', userName: 'Amadou Koné', action: 'Création utilisateur', target: 'Marie Brou (Admin)', targetId: 'admin-4', createdAt: new Date('2025-01-25T08:30:00') },
+  { id: 'ah-7', userId: 'admin-3', userName: 'Kouadio Yao', action: 'Modification tarification', target: 'Prix/km Standard', createdAt: new Date('2025-01-24T15:00:00') },
+  { id: 'ah-8', userId: 'admin-2', userName: 'Fatou Diallo', action: 'Approbation chauffeur', target: 'Seydou Keita', targetId: 'driver-11', createdAt: new Date('2025-01-24T09:10:00') },
+  { id: 'ah-9', userId: 'admin-1', userName: 'Amadou Koné', action: 'Refus document', target: 'Carte grise - Adama Sangaré', targetId: 'driver-22', createdAt: new Date('2025-01-23T14:20:00') },
+  { id: 'ah-10', userId: 'admin-3', userName: 'Kouadio Yao', action: 'Résolution ticket', target: 'TKT-0003', targetId: 'ticket-3', createdAt: new Date('2025-01-22T11:30:00') },
+  { id: 'ah-11', userId: 'admin-1', userName: 'Amadou Koné', action: 'Suspension chauffeur', target: 'Bakary Traoré', targetId: 'driver-19', createdAt: new Date('2025-01-21T16:00:00') },
+  { id: 'ah-12', userId: 'admin-2', userName: 'Fatou Diallo', action: 'Modification paramètres', target: 'Commission plateforme', createdAt: new Date('2025-01-20T10:00:00') },
+];
+
+// Tickets
+export const tickets: Ticket[] = [
+  {
+    id: 'ticket-1',
+    reference: 'TKT-0001',
+    reporterId: 'client-5',
+    reporterName: 'Aissatou Ba',
+    reporterType: 'CLIENT',
+    subject: 'Chauffeur très en retard',
+    status: 'RÉSOLU',
+    messages: [
+      { id: 'tm-1', senderType: 'USER', senderName: 'Aissatou Ba', content: 'Mon chauffeur a mis 45 minutes pour arriver alors que l\'appli indiquait 10 minutes. J\'ai failli rater mon rendez-vous.', createdAt: new Date('2025-01-25T08:00:00') },
+      { id: 'tm-2', senderType: 'ADMIN', senderName: 'Kouadio Yao', content: 'Bonjour Aissatou, nous sommes désolés pour ce désagrément. Nous avons contacté le chauffeur et pris les mesures nécessaires. Un crédit de 2000 XOF a été ajouté à votre compte.', createdAt: new Date('2025-01-25T10:30:00') },
+      { id: 'tm-3', senderType: 'USER', senderName: 'Aissatou Ba', content: 'Merci beaucoup, c\'est très professionnel de votre part.', createdAt: new Date('2025-01-25T11:00:00') },
+    ],
+    createdAt: new Date('2025-01-25T08:00:00'),
+    updatedAt: new Date('2025-01-25T11:00:00'),
+  },
+  {
+    id: 'ticket-2',
+    reference: 'TKT-0002',
+    reporterId: 'driver-5',
+    reporterName: 'Moussa Diarra',
+    reporterType: 'CHAUFFEUR',
+    subject: 'Problème de paiement Mobile Money',
+    status: 'NON_LU',
+    messages: [
+      { id: 'tm-4', senderType: 'USER', senderName: 'Moussa Diarra', content: 'Je n\'ai pas reçu le paiement de ma dernière course via Mobile Money. La course VYX-001050 est marquée comme payée mais je n\'ai rien reçu sur mon compte.', createdAt: new Date('2025-01-28T07:30:00') },
+    ],
+    createdAt: new Date('2025-01-28T07:30:00'),
+    updatedAt: new Date('2025-01-28T07:30:00'),
+  },
+  {
+    id: 'ticket-3',
+    reference: 'TKT-0003',
+    reporterId: 'client-18',
+    reporterName: 'Oumar Sy',
+    reporterType: 'CLIENT',
+    subject: 'Facturation incorrecte',
+    status: 'RÉSOLU',
+    messages: [
+      { id: 'tm-5', senderType: 'USER', senderName: 'Oumar Sy', content: 'On m\'a facturé 5000 XOF pour un trajet qui coûte normalement 2500 XOF. Le chauffeur a fait un détour très long.', createdAt: new Date('2025-01-21T14:00:00') },
+      { id: 'tm-6', senderType: 'ADMIN', senderName: 'Kouadio Yao', content: 'Bonjour Oumar, après vérification du trajet GPS, nous confirmons que le chauffeur a fait un détour injustifié. Nous avons remboursé la différence de 2500 XOF sur votre compte.', createdAt: new Date('2025-01-22T11:00:00') },
+    ],
+    createdAt: new Date('2025-01-21T14:00:00'),
+    updatedAt: new Date('2025-01-22T11:00:00'),
+  },
+  {
+    id: 'ticket-4',
+    reference: 'TKT-0004',
+    reporterId: 'driver-12',
+    reporterName: 'Seydou Keita',
+    reporterType: 'CHAUFFEUR',
+    subject: 'Application qui plante en cours de course',
+    status: 'LU',
+    messages: [
+      { id: 'tm-7', senderType: 'USER', senderName: 'Seydou Keita', content: 'L\'application se ferme toute seule pendant que je suis en course. Ça m\'est arrivé 3 fois cette semaine. Je perds mes courses à chaque fois.', createdAt: new Date('2025-01-27T19:00:00') },
+    ],
+    createdAt: new Date('2025-01-27T19:00:00'),
+    updatedAt: new Date('2025-01-27T19:00:00'),
+  },
+  {
+    id: 'ticket-5',
+    reference: 'TKT-0005',
+    reporterId: 'client-8',
+    reporterName: 'Mariam Touré',
+    reporterType: 'CLIENT',
+    subject: 'Chauffeur agressif',
+    status: 'NON_LU',
+    messages: [
+      { id: 'tm-8', senderType: 'USER', senderName: 'Mariam Touré', content: 'Le chauffeur de ma course VYX-001080 a été très agressif verbalement quand j\'ai demandé à mettre la climatisation. Je ne me sentais pas en sécurité.', createdAt: new Date('2025-01-28T20:15:00') },
+    ],
+    createdAt: new Date('2025-01-28T20:15:00'),
+    updatedAt: new Date('2025-01-28T20:15:00'),
+  },
+  {
+    id: 'ticket-6',
+    reference: 'TKT-0006',
+    reporterId: 'client-22',
+    reporterName: 'Ibrahim Cissé',
+    reporterType: 'CLIENT',
+    subject: 'Course annulée sans raison',
+    status: 'NON_LU',
+    messages: [
+      { id: 'tm-9', senderType: 'USER', senderName: 'Ibrahim Cissé', content: 'Le chauffeur a annulé ma course alors qu\'il était déjà arrivé à mon adresse. J\'ai attendu 20 minutes pour rien.', createdAt: new Date('2025-01-29T06:45:00') },
+    ],
+    createdAt: new Date('2025-01-29T06:45:00'),
+    updatedAt: new Date('2025-01-29T06:45:00'),
+  },
+];
+
+// Notifications
+export const notifications: Notification[] = [
+  { id: 'notif-1', type: 'DRIVER_PENDING', title: 'Nouveau chauffeur en attente', description: 'Youssouf Coulibaly souhaite rejoindre la plateforme', isRead: false, link: '/drivers/driver-15', relatedId: 'driver-15', createdAt: new Date('2025-01-29T08:00:00') },
+  { id: 'notif-2', type: 'HELP_REQUEST', title: 'Demande d\'aide', description: 'Moussa Diarra signale un problème de paiement', isRead: false, link: '/tickets/ticket-2', relatedId: 'ticket-2', createdAt: new Date('2025-01-28T07:30:00') },
+  { id: 'notif-3', type: 'RIDE_CANCELLED', title: 'Course annulée', description: 'VYX-001080 annulée par le chauffeur', isRead: false, link: '/courses/ride-80', relatedId: 'ride-80', createdAt: new Date('2025-01-28T18:00:00') },
+  { id: 'notif-4', type: 'TICKET_REPLY', title: 'Réponse à votre discussion', description: 'Aissatou Ba a répondu au ticket TKT-0001', isRead: true, link: '/tickets/ticket-1', relatedId: 'ticket-1', createdAt: new Date('2025-01-25T11:00:00') },
+  { id: 'notif-5', type: 'DRIVER_PENDING', title: 'Nouveau chauffeur en attente', description: 'Bakary Traoré souhaite rejoindre la plateforme', isRead: false, link: '/drivers/driver-19', relatedId: 'driver-19', createdAt: new Date('2025-01-29T09:30:00') },
+  { id: 'notif-6', type: 'HELP_REQUEST', title: 'Demande d\'aide', description: 'Mariam Touré signale un chauffeur agressif', isRead: false, link: '/tickets/ticket-5', relatedId: 'ticket-5', createdAt: new Date('2025-01-28T20:15:00') },
+  { id: 'notif-7', type: 'RIDE_CANCELLED', title: 'Course annulée', description: 'VYX-001095 annulée par le client', isRead: true, link: '/courses/ride-95', relatedId: 'ride-95', createdAt: new Date('2025-01-27T16:30:00') },
+  { id: 'notif-8', type: 'HELP_REQUEST', title: 'Demande d\'aide', description: 'Ibrahim Cissé signale une course annulée sans raison', isRead: false, link: '/tickets/ticket-6', relatedId: 'ticket-6', createdAt: new Date('2025-01-29T06:45:00') },
+];
