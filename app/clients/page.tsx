@@ -3,32 +3,45 @@
 import { useState, useMemo } from 'react';
 import { DashboardLayout } from '@/components/layout/dashboard-layout';
 import { StatusBadge } from '@/components/ui/status-badge';
-import { clients } from '@/lib/mock-data';
+import { clients as allClients } from '@/lib/mock-data';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Search, Eye, PauseCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, MoreHorizontal, ChevronLeft, ChevronRight } from 'lucide-react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import Link from 'next/link';
+import { ClientActionsModal } from '@/components/modals/client-actions-modal';
+import type { Client, ClientStatus } from '@/types';
 
 const PAGE_SIZE = 15;
 
 export default function ClientsPage() {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
+  const [clients, setClients] = useState<Client[]>(allClients);
+  const [actionsClient, setActionsClient] = useState<Client | null>(null);
 
   const filtered = useMemo(() => {
     return clients.filter((c) => {
       const name = `${c.firstName} ${c.lastName}`.toLowerCase();
       return search === '' || name.includes(search.toLowerCase()) || c.phone.includes(search) || c.email.toLowerCase().includes(search.toLowerCase());
     });
-  }, [search]);
+  }, [search, clients]);
 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
   const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   const formatCurrency = (amount: number) =>
     new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'XOF', maximumFractionDigits: 0 }).format(amount);
+
+  const handleToggleStatus = (clientId: string) => {
+    setClients((prev) =>
+      prev.map((c) =>
+        c.id === clientId
+          ? { ...c, status: (c.status === 'ACTIF' ? 'SUSPENDU' : 'ACTIF') as ClientStatus }
+          : c
+      )
+    );
+  };
 
   return (
     <DashboardLayout>
@@ -63,7 +76,7 @@ export default function ClientsPage() {
               <tbody className="divide-y divide-border">
                 {paginated.map((client) => (
                   <tr key={client.id} className="hover:bg-muted/30 transition-colors">
-                    <td className="px-4 py-3 first:pl-4 sm:first:pl-4">
+                    <td className="px-4 py-3">
                       <div className="flex items-center gap-2.5">
                         <img src={client.avatar} alt={client.firstName} className="h-8 w-8 rounded-full bg-muted" />
                         <p className="text-xs font-medium">{client.firstName} {client.lastName}</p>
@@ -80,18 +93,15 @@ export default function ClientsPage() {
                       <StatusBadge status={client.status} />
                     </td>
                     <td className="px-4 py-3">
-                      <div className="flex items-center gap-1">
-                        <Link href={`/clients/${client.id}`}>
-                          <Button variant="ghost" size="icon" className="h-7 w-7">
-                            <Eye className="h-3.5 w-3.5" />
-                          </Button>
-                        </Link>
-                        {client.status === 'ACTIF' && (
-                          <Button variant="ghost" size="icon" className="h-7 w-7 text-amber-600 hover:text-amber-700">
-                            <PauseCircle className="h-3.5 w-3.5" />
-                          </Button>
-                        )}
-                      </div>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-7 w-7"
+                        onClick={() => setActionsClient(client)}
+                        title="Actions"
+                      >
+                        <MoreHorizontal className="h-4 w-4" />
+                      </Button>
                     </td>
                   </tr>
                 ))}
@@ -122,6 +132,13 @@ export default function ClientsPage() {
           </div>
         </div>
       </div>
+
+      <ClientActionsModal
+        client={actionsClient}
+        open={!!actionsClient}
+        onClose={() => setActionsClient(null)}
+        onToggleStatus={handleToggleStatus}
+      />
     </DashboardLayout>
   );
 }

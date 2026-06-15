@@ -3,17 +3,15 @@
 import { useState, useMemo } from 'react';
 import { DashboardLayout } from '@/components/layout/dashboard-layout';
 import { StatusBadge } from '@/components/ui/status-badge';
-import { drivers } from '@/lib/mock-data';
+import { drivers as allDrivers } from '@/lib/mock-data';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import {
-  Search, Eye, CheckCircle, XCircle, PauseCircle, ChevronLeft, ChevronRight, Star
-} from 'lucide-react';
+import { Search, MoreHorizontal, ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import Link from 'next/link';
-import type { DriverStatus } from '@/types';
+import { DriverActionsModal } from '@/components/modals/driver-actions-modal';
+import type { Driver, DriverStatus } from '@/types';
 
 const PAGE_SIZE = 12;
 
@@ -21,6 +19,8 @@ export default function DriversPage() {
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('ALL');
   const [page, setPage] = useState(1);
+  const [drivers, setDrivers] = useState<Driver[]>(allDrivers);
+  const [actionsDriver, setActionsDriver] = useState<Driver | null>(null);
 
   const filtered = useMemo(() => {
     return drivers.filter((d) => {
@@ -29,10 +29,14 @@ export default function DriversPage() {
       const matchStatus = statusFilter === 'ALL' || d.status === statusFilter;
       return matchSearch && matchStatus;
     });
-  }, [search, statusFilter]);
+  }, [search, statusFilter, drivers]);
 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
   const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
+  const updateStatus = (driverId: string, status: DriverStatus) => {
+    setDrivers((prev) => prev.map((d) => d.id === driverId ? { ...d, status } : d));
+  };
 
   return (
     <DashboardLayout>
@@ -117,28 +121,15 @@ export default function DriversPage() {
                       <span className={`inline-flex h-2 w-2 rounded-full ${driver.isOnline ? 'bg-emerald-500' : 'bg-muted-foreground/30'}`} />
                     </td>
                     <td className="px-4 py-3">
-                      <div className="flex items-center gap-1">
-                        <Link href={`/drivers/${driver.id}`}>
-                          <Button variant="ghost" size="icon" className="h-7 w-7">
-                            <Eye className="h-3.5 w-3.5" />
-                          </Button>
-                        </Link>
-                        {driver.status === 'EN_ATTENTE' && (
-                          <>
-                            <Button variant="ghost" size="icon" className="h-7 w-7 text-emerald-600 hover:text-emerald-700">
-                              <CheckCircle className="h-3.5 w-3.5" />
-                            </Button>
-                            <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive hover:text-destructive">
-                              <XCircle className="h-3.5 w-3.5" />
-                            </Button>
-                          </>
-                        )}
-                        {driver.status === 'APPROUVÉ' && (
-                          <Button variant="ghost" size="icon" className="h-7 w-7 text-amber-600 hover:text-amber-700">
-                            <PauseCircle className="h-3.5 w-3.5" />
-                          </Button>
-                        )}
-                      </div>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-7 w-7"
+                        onClick={() => setActionsDriver(driver)}
+                        title="Actions"
+                      >
+                        <MoreHorizontal className="h-4 w-4" />
+                      </Button>
                     </td>
                   </tr>
                 ))}
@@ -170,6 +161,16 @@ export default function DriversPage() {
           </div>
         </div>
       </div>
+
+      <DriverActionsModal
+        driver={actionsDriver}
+        open={!!actionsDriver}
+        onClose={() => setActionsDriver(null)}
+        onApprove={(id) => updateStatus(id, 'APPROUVÉ')}
+        onReject={(id) => updateStatus(id, 'REFUSÉ')}
+        onSuspend={(id) => updateStatus(id, 'SUSPENDU')}
+        onReactivate={(id) => updateStatus(id, 'APPROUVÉ')}
+      />
     </DashboardLayout>
   );
 }
