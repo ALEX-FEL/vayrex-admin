@@ -12,9 +12,13 @@ import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { RideActionsModal } from '@/components/modals/ride-actions-modal';
 import { RideTraficModal } from '@/components/modals/ride-trafic-modal';
+import { ColumnVisibilityToggle } from '@/components/ui/column-visibility-toggle';
 import type { Ride, RideStatus } from '@/types';
 
 const PAGE_SIZE = 15;
+
+const ALL_COLUMNS = ['Référence', 'Client', 'Chauffeur', 'Véhicule', 'Départ', 'Destination', 'Distance', 'Prix', 'Date', 'Statut'];
+const DEFAULT_HIDDEN = new Set(['Distance', 'Prix', 'Véhicule']);
 
 const statusOptions: { value: string; label: string }[] = [
   { value: 'ALL', label: 'Tous les statuts' },
@@ -34,6 +38,7 @@ export default function CoursesPage() {
   const [rides, setRides] = useState<Ride[]>(allRides);
   const [actionsRide, setActionsRide] = useState<Ride | null>(null);
   const [traficRide, setTraficRide] = useState<Ride | null>(null);
+  const [hiddenColumns, setHiddenColumns] = useState<Set<string>>(DEFAULT_HIDDEN);
 
   const formatCurrency = (amount: number) =>
     new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'XOF', maximumFractionDigits: 0 }).format(amount);
@@ -59,6 +64,15 @@ export default function CoursesPage() {
     setRides((prev) =>
       prev.map((r) => r.id === rideId ? { ...r, status: 'ANNULÉE' as RideStatus } : r)
     );
+  };
+
+  const toggleColumn = (col: string) => {
+    setHiddenColumns((prev) => {
+      const next = new Set(prev);
+      if (next.has(col)) next.delete(col);
+      else next.add(col);
+      return next;
+    });
   };
 
   const exportCSV = () => {
@@ -91,7 +105,7 @@ export default function CoursesPage() {
         </div>
 
         {/* Filters */}
-        <div className="flex flex-col gap-3 sm:flex-row">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
           <div className="relative flex-1 sm:max-w-sm">
             <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
             <Input
@@ -111,6 +125,12 @@ export default function CoursesPage() {
               ))}
             </SelectContent>
           </Select>
+          <ColumnVisibilityToggle
+            columns={ALL_COLUMNS}
+            hidden={hiddenColumns}
+            onToggle={toggleColumn}
+            locked={['Référence', 'Statut']}
+          />
         </div>
 
         {/* Table */}
@@ -119,33 +139,60 @@ export default function CoursesPage() {
             <table className="w-full text-sm">
               <thead className="border-b border-border bg-muted/40">
                 <tr>
-                  {['Référence', 'Client', 'Chauffeur', 'Véhicule', 'Départ', 'Destination', 'Distance', 'Prix', 'Date', 'Statut', 'Actions'].map((h) => (
+                  {ALL_COLUMNS.filter((c) => !hiddenColumns.has(c)).map((h) => (
                     <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">
                       {h}
                     </th>
                   ))}
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
                 {paginated.map((ride) => (
-                  <tr key={ride.id} className="hover:bg-muted/30 transition-colors">
-                    <td className="px-4 py-3 font-mono text-xs font-medium text-primary">{ride.reference}</td>
-                    <td className="px-4 py-3 whitespace-nowrap font-medium text-xs">{ride.clientName}</td>
-                    <td className="px-4 py-3 text-xs text-muted-foreground whitespace-nowrap">{ride.driverName ?? '—'}</td>
-                    <td className="px-4 py-3 text-xs whitespace-nowrap">
-                      <span className="rounded-md bg-muted px-2 py-0.5 text-xs font-medium">{ride.vehicleType}</span>
-                    </td>
-                    <td className="px-4 py-3 text-xs text-muted-foreground max-w-[120px] truncate">{ride.departure}</td>
-                    <td className="px-4 py-3 text-xs text-muted-foreground max-w-[120px] truncate">{ride.destination}</td>
-                    <td className="px-4 py-3 text-xs whitespace-nowrap">{ride.distance} km</td>
-                    <td className="px-4 py-3 text-xs font-semibold whitespace-nowrap">{formatCurrency(ride.price)}</td>
-                    <td className="px-4 py-3 text-xs text-muted-foreground whitespace-nowrap">
-                      {format(ride.createdAt, 'dd/MM/yy HH:mm', { locale: fr })}
-                    </td>
-                    <td className="px-4 py-3">
-                      <StatusBadge status={ride.status} />
-                    </td>
-                    <td className="px-4 py-3">
+                  <tr
+                    key={ride.id}
+                    className="hover:bg-muted/30 transition-colors cursor-pointer"
+                    onClick={() => window.location.href = `/courses/${ride.id}`}
+                  >
+                    {!hiddenColumns.has('Référence') && (
+                      <td className="px-4 py-3 font-mono text-xs font-medium text-primary">{ride.reference}</td>
+                    )}
+                    {!hiddenColumns.has('Client') && (
+                      <td className="px-4 py-3 whitespace-nowrap font-medium text-xs">{ride.clientName}</td>
+                    )}
+                    {!hiddenColumns.has('Chauffeur') && (
+                      <td className="px-4 py-3 text-xs text-muted-foreground whitespace-nowrap">{ride.driverName ?? '—'}</td>
+                    )}
+                    {!hiddenColumns.has('Véhicule') && (
+                      <td className="px-4 py-3 text-xs whitespace-nowrap">
+                        <span className="rounded-md bg-muted px-2 py-0.5 text-xs font-medium">{ride.vehicleType}</span>
+                      </td>
+                    )}
+                    {!hiddenColumns.has('Départ') && (
+                      <td className="px-4 py-3 text-xs text-muted-foreground max-w-[120px] truncate">{ride.departure}</td>
+                    )}
+                    {!hiddenColumns.has('Destination') && (
+                      <td className="px-4 py-3 text-xs text-muted-foreground max-w-[120px] truncate">{ride.destination}</td>
+                    )}
+                    {!hiddenColumns.has('Distance') && (
+                      <td className="px-4 py-3 text-xs whitespace-nowrap">{ride.distance} km</td>
+                    )}
+                    {!hiddenColumns.has('Prix') && (
+                      <td className="px-4 py-3 text-xs font-semibold whitespace-nowrap">{formatCurrency(ride.price)}</td>
+                    )}
+                    {!hiddenColumns.has('Date') && (
+                      <td className="px-4 py-3 text-xs text-muted-foreground whitespace-nowrap">
+                        {format(ride.createdAt, 'dd/MM/yy HH:mm', { locale: fr })}
+                      </td>
+                    )}
+                    {!hiddenColumns.has('Statut') && (
+                      <td className="px-4 py-3">
+                        <StatusBadge status={ride.status} />
+                      </td>
+                    )}
+                    <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
                       <Button
                         variant="ghost"
                         size="icon"

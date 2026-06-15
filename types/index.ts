@@ -40,6 +40,7 @@ export interface Client {
   totalSpent: number;
   status: ClientStatus;
   createdAt: Date;
+  motif?: string;
 }
 
 export interface Driver {
@@ -60,6 +61,7 @@ export interface Driver {
   status: DriverStatus;
   isOnline: boolean;
   createdAt: Date;
+  motif?: string;
 }
 
 export interface Ride {

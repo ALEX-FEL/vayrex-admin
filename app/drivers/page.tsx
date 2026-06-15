@@ -11,9 +11,13 @@ import { Search, MoreHorizontal, ChevronLeft, ChevronRight, Star } from 'lucide-
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { DriverActionsModal } from '@/components/modals/driver-actions-modal';
+import { ColumnVisibilityToggle } from '@/components/ui/column-visibility-toggle';
 import type { Driver, DriverStatus } from '@/types';
 
 const PAGE_SIZE = 12;
+
+const ALL_COLUMNS = ['Chauffeur', 'Téléphone', 'Véhicule', 'Immatriculation', 'Note', 'Date inscription', 'Statut', 'En ligne', 'Motif'];
+const DEFAULT_HIDDEN = new Set(['En ligne', 'Motif']);
 
 export default function DriversPage() {
   const [search, setSearch] = useState('');
@@ -21,6 +25,7 @@ export default function DriversPage() {
   const [page, setPage] = useState(1);
   const [drivers, setDrivers] = useState<Driver[]>(allDrivers);
   const [actionsDriver, setActionsDriver] = useState<Driver | null>(null);
+  const [hiddenColumns, setHiddenColumns] = useState<Set<string>>(DEFAULT_HIDDEN);
 
   const filtered = useMemo(() => {
     return drivers.filter((d) => {
@@ -34,8 +39,17 @@ export default function DriversPage() {
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
   const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
-  const updateStatus = (driverId: string, status: DriverStatus) => {
-    setDrivers((prev) => prev.map((d) => d.id === driverId ? { ...d, status } : d));
+  const updateStatus = (driverId: string, status: DriverStatus, motif?: string) => {
+    setDrivers((prev) => prev.map((d) => d.id === driverId ? { ...d, status, motif: motif ?? d.motif } : d));
+  };
+
+  const toggleColumn = (col: string) => {
+    setHiddenColumns((prev) => {
+      const next = new Set(prev);
+      if (next.has(col)) next.delete(col);
+      else next.add(col);
+      return next;
+    });
   };
 
   return (
@@ -47,7 +61,7 @@ export default function DriversPage() {
         </div>
 
         {/* Filters */}
-        <div className="flex flex-col gap-3 sm:flex-row">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
           <div className="relative flex-1 sm:max-w-sm">
             <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
             <Input
@@ -69,58 +83,92 @@ export default function DriversPage() {
               <SelectItem value="SUSPENDU">Suspendu</SelectItem>
             </SelectContent>
           </Select>
+          <ColumnVisibilityToggle
+            columns={ALL_COLUMNS}
+            hidden={hiddenColumns}
+            onToggle={toggleColumn}
+            locked={['Chauffeur', 'Statut']}
+          />
         </div>
 
         {/* Table */}
         <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
           <div className="overflow-x-auto -mx-4 sm:mx-0">
-            <table className="w-full min-w-[800px] text-sm">
+            <table className="w-full min-w-[700px] text-sm">
               <thead className="border-b border-border bg-muted/40">
                 <tr>
-                  {['Chauffeur', 'Téléphone', 'Véhicule', 'Immatriculation', 'Note', 'Date inscription', 'Statut', 'En ligne', 'Actions'].map((h) => (
+                  {ALL_COLUMNS.filter((c) => !hiddenColumns.has(c)).map((h) => (
                     <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">
                       {h}
                     </th>
                   ))}
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
                 {paginated.map((driver) => (
-                  <tr key={driver.id} className="hover:bg-muted/30 transition-colors">
-                    <td className="px-4 py-3">
-                      <div className="flex items-center gap-2.5">
-                        <img
-                          src={driver.avatar}
-                          alt={driver.firstName}
-                          className="h-8 w-8 rounded-full bg-muted object-cover"
-                        />
-                        <div>
-                          <p className="text-xs font-medium">{driver.firstName} {driver.lastName}</p>
-                          <p className="text-[10px] text-muted-foreground">{driver.totalRides} courses</p>
+                  <tr
+                    key={driver.id}
+                    className="hover:bg-muted/30 transition-colors cursor-pointer"
+                    onClick={() => window.location.href = `/drivers/${driver.id}`}
+                  >
+                    {!hiddenColumns.has('Chauffeur') && (
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-2.5">
+                          <img
+                            src={driver.avatar}
+                            alt={driver.firstName}
+                            className="h-8 w-8 rounded-full bg-muted object-cover"
+                          />
+                          <div>
+                            <p className="text-xs font-medium">{driver.firstName} {driver.lastName}</p>
+                            <p className="text-[10px] text-muted-foreground">{driver.totalRides} courses</p>
+                          </div>
                         </div>
-                      </div>
-                    </td>
-                    <td className="px-4 py-3 text-xs text-muted-foreground whitespace-nowrap">{driver.phone}</td>
-                    <td className="px-4 py-3 text-xs">
-                      <span className="rounded-md bg-muted px-2 py-0.5 text-xs font-medium">{driver.vehicleType}</span>
-                    </td>
-                    <td className="px-4 py-3 font-mono text-xs">{driver.vehiclePlate}</td>
-                    <td className="px-4 py-3">
-                      <div className="flex items-center gap-1">
-                        <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
-                        <span className="text-xs font-medium">{driver.rating}</span>
-                      </div>
-                    </td>
-                    <td className="px-4 py-3 text-xs text-muted-foreground whitespace-nowrap">
-                      {format(driver.createdAt, 'dd/MM/yyyy', { locale: fr })}
-                    </td>
-                    <td className="px-4 py-3">
-                      <StatusBadge status={driver.status} />
-                    </td>
-                    <td className="px-4 py-3">
-                      <span className={`inline-flex h-2 w-2 rounded-full ${driver.isOnline ? 'bg-emerald-500' : 'bg-muted-foreground/30'}`} />
-                    </td>
-                    <td className="px-4 py-3">
+                      </td>
+                    )}
+                    {!hiddenColumns.has('Téléphone') && (
+                      <td className="px-4 py-3 text-xs text-muted-foreground whitespace-nowrap">{driver.phone}</td>
+                    )}
+                    {!hiddenColumns.has('Véhicule') && (
+                      <td className="px-4 py-3 text-xs">
+                        <span className="rounded-md bg-muted px-2 py-0.5 text-xs font-medium">{driver.vehicleType}</span>
+                      </td>
+                    )}
+                    {!hiddenColumns.has('Immatriculation') && (
+                      <td className="px-4 py-3 font-mono text-xs">{driver.vehiclePlate}</td>
+                    )}
+                    {!hiddenColumns.has('Note') && (
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-1">
+                          <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+                          <span className="text-xs font-medium">{driver.rating}</span>
+                        </div>
+                      </td>
+                    )}
+                    {!hiddenColumns.has('Date inscription') && (
+                      <td className="px-4 py-3 text-xs text-muted-foreground whitespace-nowrap">
+                        {format(driver.createdAt, 'dd/MM/yyyy', { locale: fr })}
+                      </td>
+                    )}
+                    {!hiddenColumns.has('Statut') && (
+                      <td className="px-4 py-3">
+                        <StatusBadge status={driver.status} />
+                      </td>
+                    )}
+                    {!hiddenColumns.has('En ligne') && (
+                      <td className="px-4 py-3">
+                        <span className={`inline-flex h-2 w-2 rounded-full ${driver.isOnline ? 'bg-emerald-500' : 'bg-muted-foreground/30'}`} />
+                      </td>
+                    )}
+                    {!hiddenColumns.has('Motif') && (
+                      <td className="px-4 py-3 text-xs text-muted-foreground max-w-[120px] truncate">
+                        {driver.motif || '—'}
+                      </td>
+                    )}
+                    <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
                       <Button
                         variant="ghost"
                         size="icon"
@@ -167,8 +215,8 @@ export default function DriversPage() {
         open={!!actionsDriver}
         onClose={() => setActionsDriver(null)}
         onApprove={(id) => updateStatus(id, 'APPROUVÉ')}
-        onReject={(id) => updateStatus(id, 'REFUSÉ')}
-        onSuspend={(id) => updateStatus(id, 'SUSPENDU')}
+        onReject={(id, motif) => updateStatus(id, 'REFUSÉ', motif)}
+        onSuspend={(id, motif) => updateStatus(id, 'SUSPENDU', motif)}
         onReactivate={(id) => updateStatus(id, 'APPROUVÉ')}
       />
     </DashboardLayout>

@@ -2,9 +2,7 @@
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { StatusBadge } from '@/components/ui/status-badge';
-import Link from 'next/link';
 import {
-  Eye,
   Navigation,
   XCircle,
   ChevronRight,
@@ -31,8 +29,7 @@ interface ActionItem {
   icon: React.ElementType;
   iconBg: string;
   iconColor: string;
-  onClick?: () => void;
-  href?: string;
+  onClick: () => void;
   destructive?: boolean;
   disabled?: boolean;
 }
@@ -54,14 +51,6 @@ export function RideActionsModal({
     new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'XOF', maximumFractionDigits: 0 }).format(amount);
 
   const actions: ActionItem[] = [
-    {
-      label: 'Voir les détails',
-      description: 'Consulter la fiche complète de la course',
-      icon: Eye,
-      iconBg: 'bg-primary/10',
-      iconColor: 'text-primary',
-      href: `/courses/${ride.id}`,
-    },
     {
       label: 'Voir le trafic',
       description: isActive
@@ -138,15 +127,19 @@ export function RideActionsModal({
         <div className="space-y-2">
           {actions.map((action) => {
             const Icon = action.icon;
-            const sharedCls = cn(
-              'w-full flex items-center gap-3 rounded-xl border p-3.5 text-left transition-all duration-150 group',
-              action.destructive
-                ? 'border-destructive/20 bg-destructive/5 hover:bg-destructive/10'
-                : 'border-border bg-card hover:bg-muted/50',
-              action.disabled && 'opacity-50 cursor-not-allowed pointer-events-none'
-            );
-            const inner = (
-              <>
+            return (
+              <button
+                key={action.label}
+                onClick={action.onClick}
+                disabled={action.disabled}
+                className={cn(
+                  'w-full flex items-center gap-3 rounded-xl border p-3.5 text-left transition-all duration-150 group',
+                  action.destructive
+                    ? 'border-destructive/20 bg-destructive/5 hover:bg-destructive/10'
+                    : 'border-border bg-card hover:bg-muted/50',
+                  action.disabled && 'opacity-50 cursor-not-allowed pointer-events-none'
+                )}
+              >
                 <div className={cn('flex h-9 w-9 items-center justify-center rounded-lg shrink-0', action.iconBg)}>
                   <Icon className={cn('h-4 w-4', action.iconColor)} />
                 </div>
@@ -157,19 +150,6 @@ export function RideActionsModal({
                   <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{action.description}</p>
                 </div>
                 <ChevronRight className={cn('h-4 w-4 shrink-0 transition-transform group-hover:translate-x-0.5', action.destructive ? 'text-destructive/50' : 'text-muted-foreground/50')} />
-              </>
-            );
-
-            if (action.href) {
-              return (
-                <Link key={action.label} href={action.href} onClick={onClose} className={sharedCls}>
-                  {inner}
-                </Link>
-              );
-            }
-            return (
-              <button key={action.label} onClick={action.onClick} disabled={action.disabled} className={sharedCls}>
-                {inner}
               </button>
             );
           })}
