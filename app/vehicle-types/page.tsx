@@ -9,8 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { ColumnVisibility, useColumnVisibility } from '@/components/ui/column-visibility';
-import { Plus, Pencil, Bike, Car, Crown } from 'lucide-react';
+import { Plus, Pencil, ToggleLeft, Bike, Car, Crown } from 'lucide-react';
 import type { VehicleType } from '@/types';
 import { cn } from '@/lib/utils';
 
@@ -37,28 +36,11 @@ const defaultForm: VehicleTypeForm = {
   isActive: true,
 };
 
-const columnDefs = [
-  { key: 'icon', label: 'Icône' },
-  { key: 'name', label: 'Nom' },
-  { key: 'description', label: 'Description' },
-  { key: 'passengers', label: 'Passagers' },
-  { key: 'minPrice', label: 'Prix min.' },
-  { key: 'pricePerKm', label: 'Prix/km' },
-  { key: 'pricePerMin', label: 'Prix/min' },
-  { key: 'baseCharge', label: 'Prise en charge' },
-  { key: 'status', label: 'Statut' },
-  { key: 'actions', label: 'Actions' },
-];
-
 export default function VehicleTypesPage() {
   const [types, setTypes] = useState<VehicleType[]>(vehicleTypes);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingType, setEditingType] = useState<VehicleType | null>(null);
   const [form, setForm] = useState<VehicleTypeForm>(defaultForm);
-  const { toggleColumn, isVisible } = useColumnVisibility(
-    columnDefs.map((c) => c.key),
-    ['status', 'actions', 'pricePerMin']
-  );
 
   const openAdd = () => {
     setEditingType(null);
@@ -103,12 +85,12 @@ export default function VehicleTypesPage() {
   return (
     <DashboardLayout>
       <div className="space-y-5">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h1 className="text-xl font-bold text-foreground">Types de véhicules</h1>
             <p className="mt-0.5 text-sm text-muted-foreground">{types.length} types configurés</p>
           </div>
-          <Button onClick={openAdd} className="gap-2">
+          <Button onClick={openAdd} className="gap-2 w-full sm:w-auto">
             <Plus className="h-4 w-4" />
             Ajouter un type
           </Button>
@@ -116,48 +98,40 @@ export default function VehicleTypesPage() {
 
         {/* Table */}
         <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
-          <div className="flex items-center justify-end px-4 py-3 border-b border-border">
-            <ColumnVisibility columns={columnDefs} visibleColumns={Object.fromEntries(columnDefs.map((c) => [c.key, isVisible(c.key)]))} onToggle={toggleColumn} />
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+          <div className="overflow-x-auto -mx-4 sm:mx-0">
+            <table className="w-full min-w-[800px] text-sm">
               <thead className="border-b border-border bg-muted/40">
                 <tr>
-                  {isVisible('icon') && <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">Icône</th>}
-                  {isVisible('name') && <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">Nom</th>}
-                  {isVisible('description') && <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">Description</th>}
-                  {isVisible('passengers') && <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">Passagers</th>}
-                  {isVisible('minPrice') && <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">Prix min.</th>}
-                  {isVisible('pricePerKm') && <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">Prix/km</th>}
-                  {isVisible('pricePerMin') && <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">Prix/min</th>}
-                  {isVisible('baseCharge') && <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">Prise en charge</th>}
-                  {isVisible('status') && <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">Statut</th>}
-                  {isVisible('actions') && <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">Actions</th>}
+                  {['Icône', 'Nom', 'Description', 'Passagers', 'Prix min.', 'Prix/km', 'Prix/min', 'Prise en charge', 'Statut', 'Actions'].map((h) => (
+                    <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">
+                      {h}
+                    </th>
+                  ))}
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
                 {types.map((vt) => (
                   <tr key={vt.id} className="hover:bg-muted/30 transition-colors">
-                    {isVisible('icon') && <td className="px-4 py-3">
+                    <td className="px-4 py-3">
                       <div className={cn('flex h-9 w-9 items-center justify-center rounded-lg', vt.isActive ? 'bg-primary/10 text-primary' : 'bg-muted text-muted-foreground')}>
                         {iconMap[vt.icon] ?? <Car className="h-5 w-5" />}
                       </div>
-                    </td>}
-                    {isVisible('name') && <td className="px-4 py-3 font-semibold text-xs">{vt.name}</td>}
-                    {isVisible('description') && <td className="px-4 py-3 text-xs text-muted-foreground max-w-[200px] truncate">{vt.description}</td>}
-                    {isVisible('passengers') && <td className="px-4 py-3 text-xs text-center">{vt.passengerCapacity}</td>}
-                    {isVisible('minPrice') && <td className="px-4 py-3 text-xs font-medium whitespace-nowrap">{formatCurrency(vt.minimumPrice)}</td>}
-                    {isVisible('pricePerKm') && <td className="px-4 py-3 text-xs whitespace-nowrap">{formatCurrency(vt.pricePerKm)}</td>}
-                    {isVisible('pricePerMin') && <td className="px-4 py-3 text-xs whitespace-nowrap">{formatCurrency(vt.pricePerMinute)}</td>}
-                    {isVisible('baseCharge') && <td className="px-4 py-3 text-xs whitespace-nowrap">{formatCurrency(vt.baseCharge)}</td>}
-                    {isVisible('status') && <td className="px-4 py-3">
+                    </td>
+                    <td className="px-4 py-3 font-semibold text-xs">{vt.name}</td>
+                    <td className="px-4 py-3 text-xs text-muted-foreground max-w-[200px] truncate">{vt.description}</td>
+                    <td className="px-4 py-3 text-xs text-center">{vt.passengerCapacity}</td>
+                    <td className="px-4 py-3 text-xs font-medium whitespace-nowrap">{formatCurrency(vt.minimumPrice)}</td>
+                    <td className="px-4 py-3 text-xs whitespace-nowrap">{formatCurrency(vt.pricePerKm)}</td>
+                    <td className="px-4 py-3 text-xs whitespace-nowrap">{formatCurrency(vt.pricePerMinute)}</td>
+                    <td className="px-4 py-3 text-xs whitespace-nowrap">{formatCurrency(vt.baseCharge)}</td>
+                    <td className="px-4 py-3">
                       <Switch checked={vt.isActive} onCheckedChange={() => toggleActive(vt.id)} />
-                    </td>}
-                    {isVisible('actions') && <td className="px-4 py-3">
+                    </td>
+                    <td className="px-4 py-3">
                       <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => openEdit(vt)}>
                         <Pencil className="h-3.5 w-3.5" />
                       </Button>
-                    </td>}
+                    </td>
                   </tr>
                 ))}
               </tbody>

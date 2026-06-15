@@ -45,12 +45,12 @@ export default function SettingsPage() {
   return (
     <DashboardLayout>
       <div className="space-y-5 max-w-2xl">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h1 className="text-xl font-bold text-foreground">Paramètres</h1>
             <p className="mt-0.5 text-sm text-muted-foreground">Configurez votre plateforme VAYRIX</p>
           </div>
-          <Button onClick={handleSave} className="gap-2">
+          <Button onClick={handleSave} className="gap-2 w-full sm:w-auto">
             <Save className="h-3.5 w-3.5" />
             {saved ? 'Sauvegardé !' : 'Sauvegarder'}
           </Button>

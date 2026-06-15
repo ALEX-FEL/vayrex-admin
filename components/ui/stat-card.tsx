@@ -22,13 +22,13 @@ export function StatCard({
   subtitle,
 }: StatCardProps) {
   return (
-    <div className="rounded-xl border border-border bg-card p-5 shadow-sm hover:shadow-md transition-shadow">
+    <div className="rounded-xl border border-border bg-card p-3 sm:p-5 shadow-sm hover:shadow-md transition-shadow">
       <div className="flex items-start justify-between">
         <div className="flex-1">
-          <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+          <p className="text-[10px] sm:text-xs font-medium uppercase tracking-wider text-muted-foreground">
             {title}
           </p>
-          <p className="mt-2 text-2xl font-bold text-foreground">{value}</p>
+          <p className="mt-1 sm:mt-2 text-lg sm:text-2xl font-bold text-foreground">{value}</p>
           {subtitle && (
             <p className="mt-1 text-xs text-muted-foreground">{subtitle}</p>
           )}

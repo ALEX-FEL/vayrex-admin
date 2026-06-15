@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react';
 import { DashboardLayout } from '@/components/layout/dashboard-layout';
 import { StatusBadge } from '@/components/ui/status-badge';
 import { StatCard } from '@/components/ui/stat-card';
-import { ColumnVisibility, useColumnVisibility } from '@/components/ui/column-visibility';
+import { PaymentMethodChart } from '@/components/charts/payment-method-chart';
 import { payments, getPaymentStats } from '@/lib/mock-data';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -15,25 +15,11 @@ import { fr } from 'date-fns/locale';
 
 const PAGE_SIZE = 15;
 
-const columnDefs = [
-  { key: 'reference', label: 'Référence' },
-  { key: 'client', label: 'Client' },
-  { key: 'driver', label: 'Chauffeur' },
-  { key: 'amount', label: 'Montant' },
-  { key: 'method', label: 'Mode' },
-  { key: 'date', label: 'Date' },
-  { key: 'status', label: 'Statut' },
-];
-
 export default function PaymentsPage() {
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('ALL');
   const [methodFilter, setMethodFilter] = useState('ALL');
   const [page, setPage] = useState(1);
-  const { toggleColumn, isVisible } = useColumnVisibility(
-    columnDefs.map((c) => c.key),
-    ['method', 'date', 'status']
-  );
 
   const stats = getPaymentStats();
 
@@ -63,7 +49,7 @@ export default function PaymentsPage() {
         </div>
 
         {/* KPIs */}
-        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
           <StatCard title="Revenu total" value={formatCurrency(stats.totalRevenue)} icon={CreditCard} iconBg="bg-primary/10" iconColor="text-primary" trend={24} />
           <StatCard title="Revenu du mois" value={formatCurrency(stats.monthRevenue)} icon={TrendingUp} iconBg="bg-emerald-50 dark:bg-emerald-950/30" iconColor="text-emerald-600" />
           <StatCard title="Total Cash" value={formatCurrency(stats.cashTotal)} icon={Banknote} iconBg="bg-amber-50 dark:bg-amber-950/30" iconColor="text-amber-600" />
@@ -73,8 +59,8 @@ export default function PaymentsPage() {
         <div className="grid gap-4 lg:grid-cols-1">
           <div className="lg:col-span-2 space-y-4">
             {/* Filters */}
-            <div className="flex gap-3 items-center">
-              <div className="relative flex-1 max-w-xs">
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <div className="relative flex-1 sm:max-w-xs">
                 <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   placeholder="Rechercher un paiement..."
@@ -83,52 +69,51 @@ export default function PaymentsPage() {
                   className="pl-9 h-9 text-sm"
                 />
               </div>
-              <Select value={statusFilter} onValueChange={(v) => { setStatusFilter(v); setPage(1); }}>
-                <SelectTrigger className="w-36 h-9 text-sm">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="ALL">Tous</SelectItem>
-                  <SelectItem value="PAYÉ">Payé</SelectItem>
-                  <SelectItem value="EN_ATTENTE">En attente</SelectItem>
-                </SelectContent>
-              </Select>
-              <Select value={methodFilter} onValueChange={(v) => { setMethodFilter(v); setPage(1); }}>
-                <SelectTrigger className="w-40 h-9 text-sm">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="ALL">Tous les modes</SelectItem>
-                  <SelectItem value="CASH">Cash</SelectItem>
-                  <SelectItem value="MOBILE_MONEY">Mobile Money</SelectItem>
-                </SelectContent>
-              </Select>
-              <ColumnVisibility columns={columnDefs} visibleColumns={Object.fromEntries(columnDefs.map((c) => [c.key, isVisible(c.key)]))} onToggle={toggleColumn} />
+              <div className="flex gap-3">
+                <Select value={statusFilter} onValueChange={(v) => { setStatusFilter(v); setPage(1); }}>
+                  <SelectTrigger className="w-full h-9 text-sm sm:w-36">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="ALL">Tous</SelectItem>
+                    <SelectItem value="PAYÉ">Payé</SelectItem>
+                    <SelectItem value="EN_ATTENTE">En attente</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Select value={methodFilter} onValueChange={(v) => { setMethodFilter(v); setPage(1); }}>
+                  <SelectTrigger className="w-full h-9 text-sm sm:w-40">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="ALL">Tous les modes</SelectItem>
+                    <SelectItem value="CASH">Cash</SelectItem>
+                    <SelectItem value="MOBILE_MONEY">Mobile Money</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
 
             {/* Table */}
             <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
+              <div className="overflow-x-auto -mx-4 sm:mx-0">
+                <table className="w-full min-w-[600px] text-sm">
                   <thead className="border-b border-border bg-muted/40">
                     <tr>
-                      {isVisible('reference') && <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">Référence</th>}
-                      {isVisible('client') && <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">Client</th>}
-                      {isVisible('driver') && <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">Chauffeur</th>}
-                      {isVisible('amount') && <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">Montant</th>}
-                      {isVisible('method') && <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">Mode</th>}
-                      {isVisible('date') && <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">Date</th>}
-                      {isVisible('status') && <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">Statut</th>}
+                      {['Référence', 'Client', 'Chauffeur', 'Montant', 'Mode', 'Date', 'Statut'].map((h) => (
+                        <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">
+                          {h}
+                        </th>
+                      ))}
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-border">
                     {paginated.map((payment) => (
                       <tr key={payment.id} className="hover:bg-muted/30 transition-colors">
-                        {isVisible('reference') && <td className="px-4 py-3 font-mono text-xs font-medium text-primary">{payment.reference}</td>}
-                        {isVisible('client') && <td className="px-4 py-3 text-xs font-medium whitespace-nowrap">{payment.clientName}</td>}
-                        {isVisible('driver') && <td className="px-4 py-3 text-xs text-muted-foreground whitespace-nowrap">{payment.driverName || '—'}</td>}
-                        {isVisible('amount') && <td className="px-4 py-3 text-xs font-bold whitespace-nowrap">{formatCurrency(payment.amount)}</td>}
-                        {isVisible('method') && <td className="px-4 py-3">
+                        <td className="px-4 py-3 font-mono text-xs font-medium text-primary">{payment.reference}</td>
+                        <td className="px-4 py-3 text-xs font-medium whitespace-nowrap">{payment.clientName}</td>
+                        <td className="px-4 py-3 text-xs text-muted-foreground whitespace-nowrap">{payment.driverName || '—'}</td>
+                        <td className="px-4 py-3 text-xs font-bold whitespace-nowrap">{formatCurrency(payment.amount)}</td>
+                        <td className="px-4 py-3">
                           <span className={`rounded-full border px-2 py-0.5 text-xs font-medium ${
                             payment.method === 'CASH'
                               ? 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/30 dark:text-amber-400 dark:border-amber-800'
@@ -136,13 +121,13 @@ export default function PaymentsPage() {
                           }`}>
                             {payment.method === 'CASH' ? 'Cash' : 'Mobile Money'}
                           </span>
-                        </td>}
-                        {isVisible('date') && <td className="px-4 py-3 text-xs text-muted-foreground whitespace-nowrap">
+                        </td>
+                        <td className="px-4 py-3 text-xs text-muted-foreground whitespace-nowrap">
                           {format(payment.createdAt, 'dd/MM/yy HH:mm', { locale: fr })}
-                        </td>}
-                        {isVisible('status') && <td className="px-4 py-3">
+                        </td>
+                        <td className="px-4 py-3">
                           <StatusBadge status={payment.status} />
-                        </td>}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -171,6 +156,11 @@ export default function PaymentsPage() {
               </div>
             </div>
           </div>
+
+          {/* Chart */}
+          {/* <div>
+            <PaymentMethodChart />
+          </div> */}
         </div>
       </div>
     </DashboardLayout>

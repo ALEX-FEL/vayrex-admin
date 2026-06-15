@@ -52,7 +52,7 @@ export default function PricingPage() {
 
         <div className="grid gap-4 lg:grid-cols-2">
           {/* Global Params */}
-          <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
+          <div className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm">
             <h2 className="mb-4 text-sm font-semibold">Paramètres globaux</h2>
             <div className="space-y-4">
               <div className="space-y-1.5">
@@ -94,7 +94,7 @@ export default function PricingPage() {
           </div>
 
           {/* Simulator */}
-          <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
+          <div className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm">
             <div className="flex items-center gap-2 mb-4">
               <Calculator className="h-4 w-4 text-primary" />
               <h2 className="text-sm font-semibold">Simulateur de prix</h2>
@@ -166,26 +166,26 @@ export default function PricingPage() {
         </div>
 
         {/* Vehicle Pricing Table */}
-        <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
+        <div className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm">
           <h2 className="mb-4 text-sm font-semibold">Tarifs par type de véhicule</h2>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+          <div className="overflow-x-auto -mx-4 sm:mx-0">
+            <table className="w-full min-w-[600px] text-sm">
               <thead>
                 <tr className="border-b border-border">
                   {['Type', 'Prix minimum', 'Prix/km', 'Prix/min', 'Prise en charge', 'Statut'].map((h) => (
-                    <th key={h} className="pb-2 pr-6 text-left text-xs font-semibold text-muted-foreground">{h}</th>
+                    <th key={h} className="pb-2 px-4 text-left text-xs font-semibold text-muted-foreground first:pl-4 sm:first:pl-0">{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
                 {vehicleTypes.map((vt) => (
                   <tr key={vt.id} className="hover:bg-muted/30">
-                    <td className="py-3 pr-6 font-semibold text-xs">{vt.name}</td>
-                    <td className="py-3 pr-6 text-xs">{formatCurrency(vt.minimumPrice)}</td>
-                    <td className="py-3 pr-6 text-xs">{formatCurrency(vt.pricePerKm)}</td>
-                    <td className="py-3 pr-6 text-xs">{formatCurrency(vt.pricePerMinute)}</td>
-                    <td className="py-3 pr-6 text-xs">{formatCurrency(vt.baseCharge)}</td>
-                    <td className="py-3">
+                    <td className="py-3 px-4 font-semibold text-xs first:pl-4 sm:first:pl-0">{vt.name}</td>
+                    <td className="py-3 px-4 text-xs">{formatCurrency(vt.minimumPrice)}</td>
+                    <td className="py-3 px-4 text-xs">{formatCurrency(vt.pricePerKm)}</td>
+                    <td className="py-3 px-4 text-xs">{formatCurrency(vt.pricePerMinute)}</td>
+                    <td className="py-3 px-4 text-xs">{formatCurrency(vt.baseCharge)}</td>
+                    <td className="py-3 px-4">
                       <span className={`rounded-full border px-2.5 py-0.5 text-xs font-medium ${
                         vt.isActive
                           ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/30 dark:text-emerald-400 dark:border-emerald-800'

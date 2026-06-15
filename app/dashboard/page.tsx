@@ -40,7 +40,7 @@ export default function DashboardPage() {
         </div>
 
         {/* KPI Grid */}
-        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
           <StatCard
             title="Total clients"
             value={stats.totalClients}
@@ -75,7 +75,7 @@ export default function DashboardPage() {
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
           <StatCard
             title="Courses du jour"
             value={stats.todayRides}
@@ -124,14 +124,14 @@ export default function DashboardPage() {
           </div>
 
           {/* Recent Activity */}
-          <div className="lg:col-span-2 rounded-xl border border-border bg-card p-5 shadow-sm">
+          <div className="lg:col-span-2 rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm">
             <h3 className="mb-4 text-sm font-semibold text-foreground">Activité récente</h3>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
+            <div className="overflow-x-auto -mx-4 sm:mx-0">
+              <table className="w-full min-w-[500px] text-sm">
                 <thead>
                   <tr className="border-b border-border">
                     {['Heure', 'Client', 'Chauffeur', 'Destination', 'Montant', 'Statut'].map((h) => (
-                      <th key={h} className="pb-2 pr-4 text-left text-xs font-medium text-muted-foreground">
+                      <th key={h} className="pb-2 px-4 text-left text-xs font-medium text-muted-foreground first:pl-4 sm:first:pl-0">
                         {h}
                       </th>
                     ))}
@@ -140,20 +140,20 @@ export default function DashboardPage() {
                 <tbody className="divide-y divide-border">
                   {recentActivity.map((ride) => (
                     <tr key={ride.id} className="hover:bg-muted/40 transition-colors">
-                      <td className="py-2.5 pr-4 text-xs text-muted-foreground whitespace-nowrap">
+                      <td className="py-2.5 px-4 text-xs text-muted-foreground whitespace-nowrap first:pl-4 sm:first:pl-0">
                         {format(ride.createdAt, 'HH:mm', { locale: fr })}
                       </td>
-                      <td className="py-2.5 pr-4 font-medium text-xs whitespace-nowrap">{ride.clientName}</td>
-                      <td className="py-2.5 pr-4 text-xs text-muted-foreground whitespace-nowrap">
+                      <td className="py-2.5 px-4 font-medium text-xs whitespace-nowrap">{ride.clientName}</td>
+                      <td className="py-2.5 px-4 text-xs text-muted-foreground whitespace-nowrap">
                         {ride.driverName ?? '—'}
                       </td>
-                      <td className="py-2.5 pr-4 text-xs text-muted-foreground max-w-[140px] truncate">
+                      <td className="py-2.5 px-4 text-xs text-muted-foreground max-w-[140px] truncate">
                         {ride.destination}
                       </td>
-                      <td className="py-2.5 pr-4 text-xs font-medium whitespace-nowrap">
+                      <td className="py-2.5 px-4 text-xs font-medium whitespace-nowrap">
                         {formatCurrency(ride.price)}
                       </td>
-                      <td className="py-2.5">
+                      <td className="py-2.5 px-4 last:pr-4 sm:last:pr-0">
                         <StatusBadge status={ride.status} />
                       </td>
                     </tr>
