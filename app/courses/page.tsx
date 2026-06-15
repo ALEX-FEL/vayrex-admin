@@ -3,15 +3,16 @@
 import { useState, useMemo } from 'react';
 import { DashboardLayout } from '@/components/layout/dashboard-layout';
 import { StatusBadge } from '@/components/ui/status-badge';
-import { rides } from '@/lib/mock-data';
+import { rides as allRides } from '@/lib/mock-data';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search, Download, Eye, XCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, Download, MoreHorizontal, ChevronLeft, ChevronRight } from 'lucide-react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import Link from 'next/link';
-import type { RideStatus } from '@/types';
+import { RideActionsModal } from '@/components/modals/ride-actions-modal';
+import { RideTraficModal } from '@/components/modals/ride-trafic-modal';
+import type { Ride, RideStatus } from '@/types';
 
 const PAGE_SIZE = 15;
 
@@ -30,6 +31,9 @@ export default function CoursesPage() {
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('ALL');
   const [page, setPage] = useState(1);
+  const [rides, setRides] = useState<Ride[]>(allRides);
+  const [actionsRide, setActionsRide] = useState<Ride | null>(null);
+  const [traficRide, setTraficRide] = useState<Ride | null>(null);
 
   const formatCurrency = (amount: number) =>
     new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'XOF', maximumFractionDigits: 0 }).format(amount);
@@ -46,10 +50,16 @@ export default function CoursesPage() {
       const matchStatus = statusFilter === 'ALL' || r.status === statusFilter;
       return matchSearch && matchStatus;
     });
-  }, [search, statusFilter]);
+  }, [search, statusFilter, rides]);
 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
   const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
+  const handleCancelRide = (rideId: string) => {
+    setRides((prev) =>
+      prev.map((r) => r.id === rideId ? { ...r, status: 'ANNULÉE' as RideStatus } : r)
+    );
+  };
 
   const exportCSV = () => {
     const headers = ['Référence', 'Client', 'Chauffeur', 'Type véhicule', 'Départ', 'Destination', 'Distance (km)', 'Prix (XOF)', 'Date', 'Statut'];
@@ -136,18 +146,15 @@ export default function CoursesPage() {
                       <StatusBadge status={ride.status} />
                     </td>
                     <td className="px-4 py-3">
-                      <div className="flex items-center gap-1">
-                        <Link href={`/courses/${ride.id}`}>
-                          <Button variant="ghost" size="icon" className="h-7 w-7">
-                            <Eye className="h-3.5 w-3.5" />
-                          </Button>
-                        </Link>
-                        {ride.status !== 'TERMINÉE' && ride.status !== 'ANNULÉE' && (
-                          <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive hover:text-destructive">
-                            <XCircle className="h-3.5 w-3.5" />
-                          </Button>
-                        )}
-                      </div>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-7 w-7"
+                        onClick={() => setActionsRide(ride)}
+                        title="Actions"
+                      >
+                        <MoreHorizontal className="h-4 w-4" />
+                      </Button>
                     </td>
                   </tr>
                 ))}
@@ -197,6 +204,21 @@ export default function CoursesPage() {
           </div>
         </div>
       </div>
+
+      {/* Modals */}
+      <RideActionsModal
+        ride={actionsRide}
+        open={!!actionsRide}
+        onClose={() => setActionsRide(null)}
+        onCancelRide={handleCancelRide}
+        onOpenTrafic={(ride) => setTraficRide(ride)}
+      />
+
+      <RideTraficModal
+        ride={traficRide}
+        open={!!traficRide}
+        onClose={() => setTraficRide(null)}
+      />
     </DashboardLayout>
   );
 }

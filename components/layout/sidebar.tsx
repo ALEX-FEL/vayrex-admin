@@ -13,11 +13,13 @@ import {
   ChevronRight,
   Zap,
   X,
+  MapPin,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/trafic', label: 'Trafic', icon: MapPin },
   { href: '/courses', label: 'Courses', icon: Car },
   { href: '/drivers', label: 'Chauffeurs', icon: UserCheck },
   { href: '/clients', label: 'Clients', icon: Users },

@@ -6,7 +6,18 @@ import { DashboardLayout } from '@/components/layout/dashboard-layout';
 import { StatusBadge } from '@/components/ui/status-badge';
 import { rides } from '@/lib/mock-data';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, MapPin, User, Car, Clock, Navigation, CircleCheck as CheckCircle2, Circle as XCircle } from 'lucide-react';
+import {
+  ArrowLeft,
+  MapPin,
+  User,
+  Phone,
+  Car,
+  Clock,
+  CreditCard,
+  Navigation,
+  CheckCircle2,
+  Circle,
+} from 'lucide-react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
@@ -176,25 +187,8 @@ export default function CourseDetailPage() {
               </div>
             )}
             {ride.status === 'ANNULÉE' && (
-              <div className="rounded-xl border border-destructive/20 bg-destructive/5 p-5 space-y-3">
-                <div className="flex items-center gap-2 text-sm text-destructive font-medium">
-                  <XCircle className="h-4 w-4" />
-                  Cette course a été annulée
-                </div>
-                {ride.cancelledBy && (
-                  <div className="rounded-md bg-background border border-border px-3 py-2.5">
-                    <p className="text-xs text-muted-foreground">Annulée par</p>
-                    <p className="mt-0.5 text-sm font-semibold">
-                      {ride.cancelledBy === 'CLIENT' ? 'Le client' : 'Le chauffeur'}
-                    </p>
-                  </div>
-                )}
-                {ride.cancellationReason && (
-                  <div className="rounded-md bg-background border border-border px-3 py-2.5">
-                    <p className="text-xs text-muted-foreground">Motif</p>
-                    <p className="mt-0.5 text-sm font-medium">{ride.cancellationReason}</p>
-                  </div>
-                )}
+              <div className="rounded-xl border border-destructive/20 bg-destructive/5 p-4 text-sm text-destructive font-medium">
+                Cette course a été annulée.
               </div>
             )}
           </div>

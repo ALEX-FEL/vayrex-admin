@@ -1,24 +1,13 @@
 import { faker } from '@faker-js/faker/locale/fr';
 import type {
-  ActionHistory,
-  AdminRole,
-  AdminUser,
-  CancellationSource,
   Client,
-  DocumentVerificationStatus,
   Driver,
-  DriverDocument,
   DriverStatus,
-  Notification,
-  NotificationType,
   Payment,
   PaymentMethod,
   PaymentStatus,
   Ride,
   RideStatus,
-  Ticket,
-  TicketMessage,
-  TicketStatus,
   VehicleType,
 } from '@/types';
 
@@ -91,7 +80,6 @@ export const clients: Client[] = Array.from({ length: 50 }, (_, i) => {
       { weight: 85, value: 'ACTIF' as const },
       { weight: 15, value: 'SUSPENDU' as const },
     ]),
-    motif: undefined,
     createdAt: faker.date.between({ from: '2023-01-01', to: '2024-12-01' }),
   };
 });
@@ -105,46 +93,6 @@ export const drivers: Driver[] = Array.from({ length: 30 }, (_, i) => {
   const firstName = faker.person.firstName('male');
   const lastName = faker.person.lastName();
   const vType = faker.helpers.arrayElement(vehicleTypeNames);
-  const idCardNumber = `CNI-${faker.string.alphanumeric(10).toUpperCase()}`;
-  const licenseNumber = `PER-${faker.string.alphanumeric(8).toUpperCase()}`;
-  const vehiclePlate = `AB ${faker.number.int({ min: 1000, max: 9999 })} ${faker.helpers.arrayElement(['CI', 'AB', 'CD'])}`;
-
-  const docs: DriverDocument[] = [
-    {
-      id: `doc-${i + 1}-1`,
-      label: "Carte nationale d'identité",
-      value: idCardNumber,
-      fileUrl: `/uploads/cni_${idCardNumber}.pdf`,
-      verificationStatus: faker.helpers.weightedArrayElement([
-        { weight: 60, value: 'VÉRIFIÉ' as DocumentVerificationStatus },
-        { weight: 30, value: 'EN_ATTENTE' as DocumentVerificationStatus },
-        { weight: 10, value: 'REFUSÉ' as DocumentVerificationStatus },
-      ]),
-    },
-    {
-      id: `doc-${i + 1}-2`,
-      label: 'Permis de conduire',
-      value: licenseNumber,
-      fileUrl: `/uploads/permis_${licenseNumber}.pdf`,
-      verificationStatus: faker.helpers.weightedArrayElement([
-        { weight: 60, value: 'VÉRIFIÉ' as DocumentVerificationStatus },
-        { weight: 30, value: 'EN_ATTENTE' as DocumentVerificationStatus },
-        { weight: 10, value: 'REFUSÉ' as DocumentVerificationStatus },
-      ]),
-    },
-    {
-      id: `doc-${i + 1}-3`,
-      label: 'Carte grise',
-      value: `CG-${vehiclePlate.replace(/\s/g, '')}`,
-      fileUrl: `/uploads/cg_${vehiclePlate.replace(/\s/g, '')}.pdf`,
-      verificationStatus: faker.helpers.weightedArrayElement([
-        { weight: 60, value: 'VÉRIFIÉ' as DocumentVerificationStatus },
-        { weight: 30, value: 'EN_ATTENTE' as DocumentVerificationStatus },
-        { weight: 10, value: 'REFUSÉ' as DocumentVerificationStatus },
-      ]),
-    },
-  ];
-
   return {
     id: `driver-${i + 1}`,
     firstName,
@@ -155,10 +103,9 @@ export const drivers: Driver[] = Array.from({ length: 30 }, (_, i) => {
     vehicleType: vType,
     vehicleBrand: faker.helpers.arrayElement(vehicleBrands),
     vehicleColor: faker.helpers.arrayElement(vehicleColors),
-    vehiclePlate,
-    licenseNumber,
-    idCardNumber,
-    documents: docs,
+    vehiclePlate: `AB ${faker.number.int({ min: 1000, max: 9999 })} ${faker.helpers.arrayElement(['CI', 'AB', 'CD'])}`,
+    licenseNumber: `PER-${faker.string.alphanumeric(8).toUpperCase()}`,
+    idCardNumber: `CNI-${faker.string.alphanumeric(10).toUpperCase()}`,
     totalRides: faker.number.int({ min: 0, max: 500 }),
     rating: parseFloat(faker.number.float({ min: 3.5, max: 5, fractionDigits: 1 }).toFixed(1)),
     status: faker.helpers.weightedArrayElement([
@@ -167,7 +114,6 @@ export const drivers: Driver[] = Array.from({ length: 30 }, (_, i) => {
       { weight: 10, value: 'REFUSÉ' as const },
       { weight: 10, value: 'SUSPENDU' as const },
     ]),
-    motif: undefined,
     isOnline: faker.datatype.boolean({ probability: 0.4 }),
     createdAt: faker.date.between({ from: '2023-01-01', to: '2024-12-01' }),
   };
@@ -183,6 +129,23 @@ const rideStatuses: RideStatus[] = [
   'TERMINÉE',
   'ANNULÉE',
 ];
+
+export const abidjanLocationCoords: Record<string, { lat: number; lng: number }> = {
+  'Cocody, Abidjan':       { lat: 5.3514, lng: -3.9788 },
+  'Plateau, Abidjan':      { lat: 5.3247, lng: -4.0175 },
+  'Yopougon, Abidjan':     { lat: 5.3598, lng: -4.0842 },
+  'Marcory, Abidjan':      { lat: 5.3103, lng: -4.0013 },
+  'Adjamé, Abidjan':       { lat: 5.3583, lng: -4.0153 },
+  'Abobo, Abidjan':        { lat: 5.4113, lng: -4.0272 },
+  'Koumassi, Abidjan':     { lat: 5.2978, lng: -3.9944 },
+  'Port-Bouët, Abidjan':   { lat: 5.2508, lng: -3.9259 },
+  'Treichville, Abidjan':  { lat: 5.2984, lng: -4.0109 },
+  'Bingerville, Abidjan':  { lat: 5.3556, lng: -3.8832 },
+  'Deux Plateaux, Abidjan':{ lat: 5.3747, lng: -3.9947 },
+  'Riviera, Abidjan':      { lat: 5.3658, lng: -3.9643 },
+  'Zone 4, Abidjan':       { lat: 5.3153, lng: -4.0019 },
+  'Angré, Abidjan':        { lat: 5.3819, lng: -3.9781 },
+};
 
 const abidjanLocations = [
   'Cocody, Abidjan',
@@ -239,15 +202,6 @@ export const rides: Ride[] = Array.from({ length: 300 }, (_, i) => {
     price: Math.round(price),
     paymentMethod: faker.helpers.arrayElement(['CASH', 'MOBILE_MONEY'] as PaymentMethod[]),
     status,
-    cancelledBy: status === 'ANNULÉE' ? faker.helpers.arrayElement(['CLIENT', 'CHAUFFEUR'] as CancellationSource[]) : undefined,
-    cancellationReason: status === 'ANNULÉE' ? faker.helpers.arrayElement([
-      'Chauffeur en retard',
-      'Annulation par erreur',
-      'Itinéraire trop long',
-      'Prix trop élevé',
-      'Véhicule non conforme',
-      'Client injoignable',
-    ]) : undefined,
     createdAt,
     updatedAt: new Date(createdAt.getTime() + faker.number.int({ min: 600000, max: 3600000 })),
   };
@@ -369,161 +323,91 @@ export function getPaymentMethodDistribution() {
   ];
 }
 
-// Admin Users
-export const adminUsers: AdminUser[] = [
-  {
-    id: 'admin-1',
-    firstName: 'Amadou',
-    lastName: 'Koné',
-    email: 'amadou.kone@vayrix.com',
-    role: 'ADMIN',
-    isActive: true,
-    createdAt: new Date('2024-01-15'),
-  },
-  {
-    id: 'admin-2',
-    firstName: 'Fatou',
-    lastName: 'Diallo',
-    email: 'fatou.diallo@vayrix.com',
-    role: 'GESTIONNAIRE',
-    isActive: true,
-    createdAt: new Date('2024-03-20'),
-  },
-  {
-    id: 'admin-3',
-    firstName: 'Kouadio',
-    lastName: 'Yao',
-    email: 'kouadio.yao@vayrix.com',
-    role: 'GESTIONNAIRE',
-    isActive: true,
-    createdAt: new Date('2024-06-10'),
-  },
-  {
-    id: 'admin-4',
-    firstName: 'Marie',
-    lastName: 'Brou',
-    email: 'marie.brou@vayrix.com',
-    role: 'ADMIN',
-    isActive: false,
-    createdAt: new Date('2024-08-05'),
-  },
-];
+// Abidjan map center
+export const MAP_CENTER = { lat: 5.3450, lng: -4.0150 };
 
-// Action History
-export const actionHistory: ActionHistory[] = [
-  { id: 'ah-1', userId: 'admin-1', userName: 'Amadou Koné', action: 'Approbation chauffeur', target: 'Ibrahim Touré', targetId: 'driver-3', createdAt: new Date('2025-01-28T09:15:00') },
-  { id: 'ah-2', userId: 'admin-2', userName: 'Fatou Diallo', action: 'Suspension client', target: 'Awa Camara', targetId: 'client-12', createdAt: new Date('2025-01-27T14:30:00') },
-  { id: 'ah-3', userId: 'admin-1', userName: 'Amadou Koné', action: 'Vérification document', target: 'Permis de conduire - Moussa Diarra', targetId: 'driver-7', createdAt: new Date('2025-01-27T11:00:00') },
-  { id: 'ah-4', userId: 'admin-3', userName: 'Kouadio Yao', action: 'Résolution ticket', target: 'TKT-0001', targetId: 'ticket-1', createdAt: new Date('2025-01-26T16:45:00') },
-  { id: 'ah-5', userId: 'admin-2', userName: 'Fatou Diallo', action: 'Refus chauffeur', target: 'Youssouf Coulibaly', targetId: 'driver-15', createdAt: new Date('2025-01-26T10:20:00') },
-  { id: 'ah-6', userId: 'admin-1', userName: 'Amadou Koné', action: 'Création utilisateur', target: 'Marie Brou (Admin)', targetId: 'admin-4', createdAt: new Date('2025-01-25T08:30:00') },
-  { id: 'ah-7', userId: 'admin-3', userName: 'Kouadio Yao', action: 'Modification tarification', target: 'Prix/km Standard', createdAt: new Date('2025-01-24T15:00:00') },
-  { id: 'ah-8', userId: 'admin-2', userName: 'Fatou Diallo', action: 'Approbation chauffeur', target: 'Seydou Keita', targetId: 'driver-11', createdAt: new Date('2025-01-24T09:10:00') },
-  { id: 'ah-9', userId: 'admin-1', userName: 'Amadou Koné', action: 'Refus document', target: 'Carte grise - Adama Sangaré', targetId: 'driver-22', createdAt: new Date('2025-01-23T14:20:00') },
-  { id: 'ah-10', userId: 'admin-3', userName: 'Kouadio Yao', action: 'Résolution ticket', target: 'TKT-0003', targetId: 'ticket-3', createdAt: new Date('2025-01-22T11:30:00') },
-  { id: 'ah-11', userId: 'admin-1', userName: 'Amadou Koné', action: 'Suspension chauffeur', target: 'Bakary Traoré', targetId: 'driver-19', createdAt: new Date('2025-01-21T16:00:00') },
-  { id: 'ah-12', userId: 'admin-2', userName: 'Fatou Diallo', action: 'Modification paramètres', target: 'Commission plateforme', createdAt: new Date('2025-01-20T10:00:00') },
-];
+function jitter(coord: number, range = 0.015): number {
+  return coord + (Math.random() - 0.5) * range;
+}
 
-// Tickets
-export const tickets: Ticket[] = [
-  {
-    id: 'ticket-1',
-    reference: 'TKT-0001',
-    reporterId: 'client-5',
-    reporterName: 'Aissatou Ba',
-    reporterType: 'CLIENT',
-    subject: 'Chauffeur très en retard',
-    status: 'RÉSOLU',
-    messages: [
-      { id: 'tm-1', senderType: 'USER', senderName: 'Aissatou Ba', content: 'Mon chauffeur a mis 45 minutes pour arriver alors que l\'appli indiquait 10 minutes. J\'ai failli rater mon rendez-vous.', createdAt: new Date('2025-01-25T08:00:00') },
-      { id: 'tm-2', senderType: 'ADMIN', senderName: 'Kouadio Yao', content: 'Bonjour Aissatou, nous sommes désolés pour ce désagrément. Nous avons contacté le chauffeur et pris les mesures nécessaires. Un crédit de 2000 XOF a été ajouté à votre compte.', createdAt: new Date('2025-01-25T10:30:00') },
-      { id: 'tm-3', senderType: 'USER', senderName: 'Aissatou Ba', content: 'Merci beaucoup, c\'est très professionnel de votre part.', createdAt: new Date('2025-01-25T11:00:00') },
-    ],
-    createdAt: new Date('2025-01-25T08:00:00'),
-    updatedAt: new Date('2025-01-25T11:00:00'),
-  },
-  {
-    id: 'ticket-2',
-    reference: 'TKT-0002',
-    reporterId: 'driver-5',
-    reporterName: 'Moussa Diarra',
-    reporterType: 'CHAUFFEUR',
-    subject: 'Problème de paiement Mobile Money',
-    status: 'NON_LU',
-    messages: [
-      { id: 'tm-4', senderType: 'USER', senderName: 'Moussa Diarra', content: 'Je n\'ai pas reçu le paiement de ma dernière course via Mobile Money. La course VYX-001050 est marquée comme payée mais je n\'ai rien reçu sur mon compte.', createdAt: new Date('2025-01-28T07:30:00') },
-    ],
-    createdAt: new Date('2025-01-28T07:30:00'),
-    updatedAt: new Date('2025-01-28T07:30:00'),
-  },
-  {
-    id: 'ticket-3',
-    reference: 'TKT-0003',
-    reporterId: 'client-18',
-    reporterName: 'Oumar Sy',
-    reporterType: 'CLIENT',
-    subject: 'Facturation incorrecte',
-    status: 'RÉSOLU',
-    messages: [
-      { id: 'tm-5', senderType: 'USER', senderName: 'Oumar Sy', content: 'On m\'a facturé 5000 XOF pour un trajet qui coûte normalement 2500 XOF. Le chauffeur a fait un détour très long.', createdAt: new Date('2025-01-21T14:00:00') },
-      { id: 'tm-6', senderType: 'ADMIN', senderName: 'Kouadio Yao', content: 'Bonjour Oumar, après vérification du trajet GPS, nous confirmons que le chauffeur a fait un détour injustifié. Nous avons remboursé la différence de 2500 XOF sur votre compte.', createdAt: new Date('2025-01-22T11:00:00') },
-    ],
-    createdAt: new Date('2025-01-21T14:00:00'),
-    updatedAt: new Date('2025-01-22T11:00:00'),
-  },
-  {
-    id: 'ticket-4',
-    reference: 'TKT-0004',
-    reporterId: 'driver-12',
-    reporterName: 'Seydou Keita',
-    reporterType: 'CHAUFFEUR',
-    subject: 'Application qui plante en cours de course',
-    status: 'LU',
-    messages: [
-      { id: 'tm-7', senderType: 'USER', senderName: 'Seydou Keita', content: 'L\'application se ferme toute seule pendant que je suis en course. Ça m\'est arrivé 3 fois cette semaine. Je perds mes courses à chaque fois.', createdAt: new Date('2025-01-27T19:00:00') },
-    ],
-    createdAt: new Date('2025-01-27T19:00:00'),
-    updatedAt: new Date('2025-01-27T19:00:00'),
-  },
-  {
-    id: 'ticket-5',
-    reference: 'TKT-0005',
-    reporterId: 'client-8',
-    reporterName: 'Mariam Touré',
-    reporterType: 'CLIENT',
-    subject: 'Chauffeur agressif',
-    status: 'NON_LU',
-    messages: [
-      { id: 'tm-8', senderType: 'USER', senderName: 'Mariam Touré', content: 'Le chauffeur de ma course VYX-001080 a été très agressif verbalement quand j\'ai demandé à mettre la climatisation. Je ne me sentais pas en sécurité.', createdAt: new Date('2025-01-28T20:15:00') },
-    ],
-    createdAt: new Date('2025-01-28T20:15:00'),
-    updatedAt: new Date('2025-01-28T20:15:00'),
-  },
-  {
-    id: 'ticket-6',
-    reference: 'TKT-0006',
-    reporterId: 'client-22',
-    reporterName: 'Ibrahim Cissé',
-    reporterType: 'CLIENT',
-    subject: 'Course annulée sans raison',
-    status: 'NON_LU',
-    messages: [
-      { id: 'tm-9', senderType: 'USER', senderName: 'Ibrahim Cissé', content: 'Le chauffeur a annulé ma course alors qu\'il était déjà arrivé à mon adresse. J\'ai attendu 20 minutes pour rien.', createdAt: new Date('2025-01-29T06:45:00') },
-    ],
-    createdAt: new Date('2025-01-29T06:45:00'),
-    updatedAt: new Date('2025-01-29T06:45:00'),
-  },
-];
+export interface DriverMapMarker {
+  id: string;
+  name: string;
+  avatar: string;
+  vehicleType: string;
+  rating: number;
+  phone: string;
+  lat: number;
+  lng: number;
+  isOnline: boolean;
+  currentRideId: string | null;
+}
 
-// Notifications
-export const notifications: Notification[] = [
-  { id: 'notif-1', type: 'DRIVER_PENDING', title: 'Nouveau chauffeur en attente', description: 'Youssouf Coulibaly souhaite rejoindre la plateforme', isRead: false, link: '/drivers/driver-15', relatedId: 'driver-15', createdAt: new Date('2025-01-29T08:00:00') },
-  { id: 'notif-2', type: 'HELP_REQUEST', title: 'Demande d\'aide', description: 'Moussa Diarra signale un problème de paiement', isRead: false, link: '/tickets/ticket-2', relatedId: 'ticket-2', createdAt: new Date('2025-01-28T07:30:00') },
-  { id: 'notif-3', type: 'RIDE_CANCELLED', title: 'Course annulée', description: 'VYX-001080 annulée par le chauffeur', isRead: false, link: '/courses/ride-80', relatedId: 'ride-80', createdAt: new Date('2025-01-28T18:00:00') },
-  { id: 'notif-4', type: 'TICKET_REPLY', title: 'Réponse à votre discussion', description: 'Aissatou Ba a répondu au ticket TKT-0001', isRead: true, link: '/tickets/ticket-1', relatedId: 'ticket-1', createdAt: new Date('2025-01-25T11:00:00') },
-  { id: 'notif-5', type: 'DRIVER_PENDING', title: 'Nouveau chauffeur en attente', description: 'Bakary Traoré souhaite rejoindre la plateforme', isRead: false, link: '/drivers/driver-19', relatedId: 'driver-19', createdAt: new Date('2025-01-29T09:30:00') },
-  { id: 'notif-6', type: 'HELP_REQUEST', title: 'Demande d\'aide', description: 'Mariam Touré signale un chauffeur agressif', isRead: false, link: '/tickets/ticket-5', relatedId: 'ticket-5', createdAt: new Date('2025-01-28T20:15:00') },
-  { id: 'notif-7', type: 'RIDE_CANCELLED', title: 'Course annulée', description: 'VYX-001095 annulée par le client', isRead: true, link: '/courses/ride-95', relatedId: 'ride-95', createdAt: new Date('2025-01-27T16:30:00') },
-  { id: 'notif-8', type: 'HELP_REQUEST', title: 'Demande d\'aide', description: 'Ibrahim Cissé signale une course annulée sans raison', isRead: false, link: '/tickets/ticket-6', relatedId: 'ticket-6', createdAt: new Date('2025-01-29T06:45:00') },
-];
+export interface ActiveRideMapData {
+  id: string;
+  reference: string;
+  clientName: string;
+  driverName: string | null;
+  departure: string;
+  destination: string;
+  departureLat: number;
+  departureLng: number;
+  destinationLat: number;
+  destinationLng: number;
+  driverLat: number | null;
+  driverLng: number | null;
+  status: RideStatus;
+  vehicleType: string;
+  price: number;
+}
+
+export function getTrafficData(): { drivers: DriverMapMarker[]; activeRides: ActiveRideMapData[] } {
+  const activeStatuses: RideStatus[] = ['EN_ATTENTE', 'CHAUFFEUR_ASSIGNÉ', 'CHAUFFEUR_EN_ROUTE', 'ARRIVÉ', 'COURSE_EN_COURS'];
+  const activeRides = rides.filter((r) => activeStatuses.includes(r.status));
+
+  const onlineDrivers = drivers.filter((d) => d.isOnline && d.status === 'APPROUVÉ');
+
+  const driverMarkers: DriverMapMarker[] = onlineDrivers.map((d) => {
+    const activeRide = activeRides.find((r) => r.driverId === d.id);
+    const baseCoord = activeRide
+      ? abidjanLocationCoords[activeRide.departure] ?? MAP_CENTER
+      : Object.values(abidjanLocationCoords)[Math.floor(Math.random() * 14)];
+    return {
+      id: d.id,
+      name: `${d.firstName} ${d.lastName}`,
+      avatar: d.avatar,
+      vehicleType: d.vehicleType,
+      rating: d.rating,
+      phone: d.phone,
+      lat: jitter(baseCoord.lat, 0.02),
+      lng: jitter(baseCoord.lng, 0.02),
+      isOnline: true,
+      currentRideId: activeRide?.id ?? null,
+    };
+  });
+
+  const rideMapData: ActiveRideMapData[] = activeRides.map((r) => {
+    const depCoord = abidjanLocationCoords[r.departure] ?? MAP_CENTER;
+    const destCoord = abidjanLocationCoords[r.destination] ?? MAP_CENTER;
+    const assignedDriver = driverMarkers.find((d) => d.currentRideId === r.id);
+    return {
+      id: r.id,
+      reference: r.reference,
+      clientName: r.clientName,
+      driverName: r.driverName,
+      departure: r.departure,
+      destination: r.destination,
+      departureLat: depCoord.lat,
+      departureLng: depCoord.lng,
+      destinationLat: destCoord.lat,
+      destinationLng: destCoord.lng,
+      driverLat: assignedDriver?.lat ?? null,
+      driverLng: assignedDriver?.lng ?? null,
+      status: r.status,
+      vehicleType: r.vehicleType,
+      price: r.price,
+    };
+  });
+
+  return { drivers: driverMarkers, activeRides: rideMapData };
+}

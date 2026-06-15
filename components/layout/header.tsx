@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 
 const breadcrumbMap: Record<string, string> = {
   dashboard: 'Dashboard',
+  trafic: 'Trafic',
   courses: 'Courses',
   drivers: 'Chauffeurs',
   clients: 'Clients',
