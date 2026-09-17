@@ -33,7 +33,7 @@ export default function ChauffeursPage() {
     return (
       <PublicLayout>
         <div className="flex min-h-[60vh] items-center justify-center">
-          <div className="h-8 w-8 animate-spin rounded-full border-2 border-white/20 border-t-brand-blue" />
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-slate-200 border-t-brand-blue" />
         </div>
       </PublicLayout>
     );
@@ -49,10 +49,10 @@ export default function ChauffeursPage() {
         <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <div className="space-y-6 animate-fade-up">
-              <h1 className="text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl">
+              <h1 className="text-4xl font-bold leading-tight tracking-tight text-brand-ink sm:text-5xl lg:text-6xl">
                 {content.hero.title}
               </h1>
-              <p className="max-w-md text-lg text-white/60">{content.hero.subtitle}</p>
+              <p className="max-w-md text-lg text-slate-600">{content.hero.subtitle}</p>
               <Link
                 href="#inscription"
                 className="inline-block bg-gradient-to-r from-brand-blue to-brand-purple px-6 py-3 text-sm font-medium text-white rounded-xl transition-opacity hover:opacity-90"
@@ -71,22 +71,22 @@ export default function ChauffeursPage() {
       </section>
 
       {/* Revenue */}
-      <section className="border-t border-white/5 py-20">
+      <section className="border-t border-slate-200/80 bg-brand-soft py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-12 text-center">
-            <h2 className="text-3xl font-bold text-white">{content.revenue.title}</h2>
-            <p className="mt-2 text-white/50">{content.revenue.subtitle}</p>
+            <h2 className="text-3xl font-bold text-brand-ink">{content.revenue.title}</h2>
+            <p className="mt-2 text-slate-600">{content.revenue.subtitle}</p>
           </div>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {content.revenue.items.map((item, i) => {
               const Icon = revenueIcons[i] ?? Wallet;
               return (
-                <div key={i} className="rounded-2xl border border-white/5 bg-brand-surface p-6">
-                  <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-brand-blue/15 to-brand-purple/15 ring-1 ring-white/10">
+                <div key={i} className="vayrix-card p-6">
+                  <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-brand-blue/15 to-brand-purple/15">
                     <Icon className="h-5 w-5 text-brand-blue" />
                   </div>
-                  <p className="text-2xl font-bold text-white">{item.value}</p>
-                  <p className="mt-1 text-sm text-white/40">{item.label}</p>
+                  <p className="text-2xl font-bold text-brand-ink">{item.value}</p>
+                  <p className="mt-1 text-sm text-slate-500">{item.label}</p>
                 </div>
               );
             })}
@@ -95,17 +95,17 @@ export default function ChauffeursPage() {
       </section>
 
       {/* Requirements */}
-      <section className="border-t border-white/5 py-20">
+      <section className="border-t border-slate-200/80 py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-2">
             <div>
-              <h2 className="text-3xl font-bold text-white">{content.requirements.title}</h2>
-              <p className="mt-2 text-white/50">{content.requirements.subtitle}</p>
+              <h2 className="text-3xl font-bold text-brand-ink">{content.requirements.title}</h2>
+              <p className="mt-2 text-slate-600">{content.requirements.subtitle}</p>
               <ul className="mt-8 space-y-4">
                 {content.requirements.items.map((req, i) => (
                   <li key={i} className="flex items-start gap-3">
                     <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-brand-blue" />
-                    <span className="text-sm text-white/70">{req}</span>
+                    <span className="text-sm text-slate-700">{req}</span>
                   </li>
                 ))}
               </ul>
@@ -121,22 +121,22 @@ export default function ChauffeursPage() {
       </section>
 
       {/* Steps */}
-      <section className="border-t border-white/5 py-20">
+      <section className="border-t border-slate-200/80 bg-white py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-12 text-center">
-            <h2 className="text-3xl font-bold text-white">{content.steps.title}</h2>
-            <p className="mt-2 text-white/50">{content.steps.subtitle}</p>
+            <h2 className="text-3xl font-bold text-brand-ink">{content.steps.title}</h2>
+            <p className="mt-2 text-slate-600">{content.steps.subtitle}</p>
           </div>
           <div className="grid gap-6 lg:grid-cols-3">
             {content.steps.items.map((step, i) => {
               const Icon = stepIcons[i] ?? Smartphone;
               return (
-                <div key={i} className="rounded-2xl border border-white/5 bg-brand-surface p-6">
-                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-brand-blue/20 to-brand-purple/20 text-lg font-bold text-white ring-1 ring-white/10">
+                <div key={i} className="vayrix-card p-6">
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-brand-blue to-brand-purple text-lg font-bold text-white">
                     {i + 1}
                   </div>
-                  <h3 className="mb-2 text-base font-semibold text-white">{step.title}</h3>
-                  <p className="text-sm leading-relaxed text-white/50">{step.description}</p>
+                  <h3 className="mb-2 text-base font-semibold text-brand-ink">{step.title}</h3>
+                  <p className="text-sm leading-relaxed text-slate-600">{step.description}</p>
                 </div>
               );
             })}
@@ -145,13 +145,13 @@ export default function ChauffeursPage() {
       </section>
 
       {/* CTA */}
-      <section id="inscription" className="border-t border-white/5 py-20">
+      <section id="inscription" className="border-t border-slate-200/80 bg-brand-soft py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="relative overflow-hidden rounded-3xl border border-white/5 bg-gradient-to-br from-brand-surface to-brand-bg px-6 py-12 text-center sm:px-12 lg:py-16">
-            <div className="pointer-events-none absolute -top-20 left-1/2 h-60 w-[500px] -translate-x-1/2 rounded-full bg-brand-purple/15 blur-[100px]" />
+          <div className="relative overflow-hidden rounded-3xl border border-slate-200/80 bg-gradient-to-br from-white to-brand-soft px-6 py-12 text-center shadow-lg sm:px-12 lg:py-16">
+            <div className="pointer-events-none absolute -top-20 left-1/2 h-60 w-[500px] -translate-x-1/2 rounded-full bg-brand-purple/10 blur-[100px]" />
             <div className="relative">
-              <h2 className="text-3xl font-bold text-white">{content.cta.title}</h2>
-              <p className="mx-auto mt-3 max-w-md text-white/50">{content.cta.subtitle}</p>
+              <h2 className="text-3xl font-bold text-brand-ink">{content.cta.title}</h2>
+              <p className="mx-auto mt-3 max-w-md text-slate-600">{content.cta.subtitle}</p>
               <Link
                 href="#"
                 className="mt-8 inline-block bg-gradient-to-r from-brand-blue to-brand-purple px-8 py-3 text-sm font-medium text-white rounded-xl transition-opacity hover:opacity-90"

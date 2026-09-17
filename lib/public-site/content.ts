@@ -1,0 +1,278 @@
+import type { Locale } from '@/lib/i18n/use-translations';
+
+export type PublicSiteContent = ReturnType<typeof getPublicSiteContent>;
+
+export function getPublicSiteContent(locale: Locale) {
+  const isEn = locale === 'en';
+
+  return {
+    nav: {
+      solutions: isEn ? 'Solutions' : 'Solutions',
+      services: isEn ? 'Services' : 'Services',
+      technology: isEn ? 'Technology' : 'Technologie',
+      safety: isEn ? 'Safety' : 'Sécurité',
+      ai: isEn ? 'AI' : 'IA',
+      about: isEn ? 'About' : 'À propos',
+      downloadApp: isEn ? 'Download the App' : 'Télécharger l\'app',
+    },
+    hero: {
+      badge: isEn ? 'Smart mobility platform' : 'Plateforme de mobilité intelligente',
+      titleLine1: isEn ? 'Move smarter.' : 'Déplacez-vous mieux.',
+      titleLine2: isEn ? 'Move with VAYRIX.' : 'Avec VAYRIX.',
+      subtitle: isEn
+        ? 'Your journey, your way. Discover a smarter, safer and more connected way to move.'
+        : 'Votre trajet, à votre façon. Une mobilité plus intelligente, plus sûre et connectée.',
+      ctaBook: isEn ? 'Book a ride' : 'Réserver une course',
+      ctaExplore: isEn ? 'Explore VAYRIX' : 'Découvrir VAYRIX',
+      ctaDownload: isEn ? 'Download App' : 'Télécharger l\'app',
+      tripEstimate: isEn ? 'Estimated trip' : 'Trajet estimé',
+      eta: isEn ? '4 min away' : 'À 4 min',
+      priceExample: '2 500 FCFA',
+    },
+    why: {
+      id: 'why',
+      label: isEn ? 'Why VAYRIX' : 'Pourquoi VAYRIX',
+      title: isEn ? 'Mobility built on trust and speed' : 'La mobilité, rapide et fiable',
+      subtitle: isEn
+        ? 'Technology-driven transportation designed for real cities and real people.'
+        : 'Des services de transport pilotés par la technologie, pensés pour vos villes.',
+      items: [
+        { title: isEn ? 'Fast' : 'Rapide', desc: isEn ? 'Quick matching and optimized routes.' : 'Attribution rapide et trajets optimisés.' },
+        { title: isEn ? 'Reliable' : 'Fiable', desc: isEn ? 'Verified drivers and clear ETAs.' : 'Chauffeurs vérifiés et arrivées estimées claires.' },
+        { title: isEn ? 'Transparent' : 'Transparent', desc: isEn ? 'See your price before you confirm.' : 'Prix affiché avant confirmation.' },
+        { title: isEn ? 'Secure' : 'Sécurisé', desc: isEn ? 'Monitored trips and protected accounts.' : 'Trajets suivis et comptes protégés.' },
+        { title: isEn ? 'Accessible' : 'Accessible', desc: isEn ? 'Cash and Mobile Money supported.' : 'Espèces et Mobile Money acceptés.' },
+        { title: isEn ? 'Tech-driven' : 'Technologique', desc: isEn ? 'GPS, real-time tracking, smart matching.' : 'GPS, suivi temps réel, matching intelligent.' },
+      ],
+    },
+    how: {
+      id: 'how',
+      label: isEn ? 'How it works' : 'Comment ça marche',
+      title: isEn ? 'Four steps to your destination' : 'Quatre étapes vers votre destination',
+      steps: [
+        { title: isEn ? 'Enter your destination' : 'Indiquez votre destination', desc: isEn ? 'Geolocation and search help you pick the route.' : 'Géolocalisation et recherche pour définir le trajet.' },
+        { title: isEn ? 'Choose your ride' : 'Choisissez votre véhicule', desc: isEn ? 'Moto, standard, premium, van or delivery.' : 'Moto, standard, premium, van ou livraison.' },
+        { title: isEn ? 'Meet your driver' : 'Rencontrez votre chauffeur', desc: isEn ? 'Track arrival in real time on the map.' : 'Suivez l\'arrivée en temps réel sur la carte.' },
+        { title: isEn ? 'Arrive safely' : 'Arrivez en sécurité', desc: isEn ? 'Pay with cash or Mobile Money. Rate your trip.' : 'Payez en espèces ou Mobile Money. Évaluez votre course.' },
+      ],
+    },
+    services: {
+      id: 'services',
+      label: isEn ? 'Services' : 'Services',
+      title: isEn ? 'Every ride, every need' : 'Chaque trajet, chaque besoin',
+      subtitle: isEn ? 'Available in VAYRIX V1' : 'Disponible dans VAYRIX V1',
+      items: [
+        { name: isEn ? 'Motorcycle' : 'Moto', use: isEn ? 'Fast urban trips' : 'Trajets urbains rapides', price: '1 500 FCFA', desc: isEn ? 'Beat traffic with agile two-wheel mobility.' : 'Évitez les embouteillages avec la moto.' },
+        { name: isEn ? 'Standard Car' : 'Voiture standard', use: isEn ? 'Daily commutes' : 'Quotidien', price: '2 500 FCFA', desc: isEn ? 'Comfortable rides for work and errands.' : 'Confort pour le travail et les courses.' },
+        { name: isEn ? 'Premium Car' : 'Voiture premium', use: isEn ? 'Business & events' : 'Affaires & événements', price: '4 500 FCFA', desc: isEn ? 'Elevated experience with top-rated drivers.' : 'Expérience premium avec chauffeurs évalués.' },
+        { name: 'Van', use: isEn ? 'Groups & luggage' : 'Groupes & bagages', price: '5 500 FCFA', desc: isEn ? 'Space for family, teams and cargo.' : 'Espace pour familles, équipes et colis.' },
+        { name: isEn ? 'Delivery' : 'Livraison', use: isEn ? 'Packages & goods' : 'Colis & marchandises', price: '2 000 FCFA', desc: isEn ? 'Send items across the city reliably.' : 'Envoyez vos colis en ville en toute fiabilité.' },
+      ],
+    },
+    client: {
+      id: 'client',
+      label: isEn ? 'Client app' : 'App client',
+      title: isEn ? 'Your mobility command center' : 'Votre centre de mobilité',
+      subtitle: isEn ? 'VAYRIX Client — available today' : 'VAYRIX Client — disponible aujourd\'hui',
+      features: [
+        isEn ? 'Automatic geolocation' : 'Géolocalisation automatique',
+        isEn ? 'Destination search' : 'Recherche de destination',
+        isEn ? 'Vehicle selection' : 'Choix du véhicule',
+        isEn ? 'Price before confirmation' : 'Prix avant confirmation',
+        isEn ? 'Real-time driver tracking' : 'Suivi chauffeur en temps réel',
+        isEn ? 'Cash payment' : 'Paiement espèces',
+        isEn ? 'Mobile Money payment' : 'Paiement Mobile Money',
+        isEn ? 'Ride history' : 'Historique des courses',
+        isEn ? 'In-app messaging' : 'Messagerie intégrée',
+        isEn ? 'Customer support' : 'Support client',
+      ],
+    },
+    driver: {
+      id: 'driver',
+      label: isEn ? 'Driver app' : 'App chauffeur',
+      title: isEn ? 'Drive your earnings forward' : 'Pilotez vos revenus',
+      subtitle: isEn ? 'VAYRIX Driver — available today' : 'VAYRIX Driver — disponible aujourd\'hui',
+      features: [
+        isEn ? 'Driver registration' : 'Inscription chauffeur',
+        isEn ? 'Document verification' : 'Vérification des documents',
+        isEn ? 'Vehicle registration' : 'Enregistrement véhicule',
+        isEn ? 'Online / offline status' : 'Statut en ligne / hors ligne',
+        isEn ? 'Real-time ride requests' : 'Demandes de course en direct',
+        isEn ? 'Navigation' : 'Navigation',
+        isEn ? 'Ride management' : 'Gestion des courses',
+        isEn ? 'Payment confirmation' : 'Confirmation de paiement',
+        isEn ? 'Ride history & balance' : 'Historique & solde',
+        isEn ? 'Breakdown assistance' : 'Assistance panne',
+      ],
+    },
+    safety: {
+      id: 'safety',
+      label: isEn ? 'Safety' : 'Sécurité',
+      title: isEn ? 'Safety at the core of every trip' : 'La sécurité au cœur de chaque trajet',
+      points: [
+        { title: isEn ? 'Driver verification' : 'Vérification chauffeurs', desc: isEn ? 'Identity and license checks before going online.' : 'Contrôle d\'identité et permis avant mise en ligne.' },
+        { title: isEn ? 'Vehicle verification' : 'Vérification véhicules', desc: isEn ? 'Registration and condition standards.' : 'Immatriculation et standards de condition.' },
+        { title: isEn ? 'Trip monitoring' : 'Suivi des trajets', desc: isEn ? 'Live GPS and trip status visibility.' : 'GPS live et visibilité du statut de course.' },
+        { title: isEn ? 'Secure access' : 'Accès sécurisé', desc: isEn ? 'Protected authentication for accounts.' : 'Authentification protégée des comptes.' },
+        { title: isEn ? 'Real-time info' : 'Infos temps réel', desc: isEn ? 'Know where you are, every moment.' : 'Sachez où vous êtes, à chaque instant.' },
+        { title: isEn ? '24/7 support' : 'Support 24/7', desc: isEn ? 'Human assistance when you need it.' : 'Une équipe humaine quand vous en avez besoin.' },
+      ],
+    },
+    payment: {
+      id: 'payment',
+      label: isEn ? 'Payment' : 'Paiement',
+      title: isEn ? 'Pay your way' : 'Payez comme vous voulez',
+      desc: isEn
+        ? 'VAYRIX makes transportation accessible with flexible payment methods available in V1.'
+        : 'VAYRIX rend la mobilité accessible avec des moyens de paiement flexibles en V1.',
+      methods: [
+        { name: isEn ? 'Cash' : 'Espèces', desc: isEn ? 'Pay directly to your driver at the end of the trip.' : 'Réglez directement votre chauffeur en fin de course.' },
+        { name: 'Mobile Money', desc: isEn ? 'MTN, Orange and local wallets supported.' : 'MTN, Orange et portefeuilles locaux pris en charge.' },
+      ],
+    },
+    realtime: {
+      id: 'realtime',
+      label: isEn ? 'Real-time' : 'Temps réel',
+      title: isEn ? 'Real-time technology' : 'Technologie temps réel',
+      items: [
+        isEn ? 'Precision GPS' : 'GPS de précision',
+        isEn ? 'Live driver tracking' : 'Suivi chauffeur en direct',
+        isEn ? 'Intelligent driver assignment' : 'Attribution intelligente',
+        isEn ? 'Route optimization' : 'Optimisation d\'itinéraire',
+        isEn ? 'Live ride status' : 'Statut de course en direct',
+      ],
+    },
+    intelligence: {
+      id: 'intelligence',
+      badge: isEn ? 'Coming Soon' : 'Bientôt',
+      title: isEn ? 'Mobility is changing. VAYRIX is building what comes next.' : 'La mobilité évolue. VAYRIX construit la suite.',
+      subtitle: 'VAYRIX Intelligence',
+      features: [
+        isEn ? 'Intelligent driver allocation' : 'Attribution intelligente des chauffeurs',
+        isEn ? 'Demand prediction' : 'Prédiction de la demande',
+        isEn ? 'Hot-zone detection' : 'Détection des zones chaudes',
+        isEn ? 'Advanced route optimization' : 'Optimisation avancée des trajets',
+        isEn ? 'Fraud detection' : 'Détection de fraude',
+        isEn ? 'Intelligent support assistant' : 'Assistant support intelligent',
+        isEn ? 'Personalized mobility' : 'Recommandations mobilité personnalisées',
+        isEn ? 'Predictive maintenance' : 'Maintenance prédictive',
+        isEn ? 'Demand analytics' : 'Analytique de la demande',
+      ],
+    },
+    comingSoon: {
+      id: 'coming-soon',
+      badge: isEn ? 'Coming Soon' : 'Bientôt',
+      title: isEn ? 'The road ahead' : 'La route à venir',
+      subtitle: isEn ? 'Not part of VAYRIX V1 — on our product roadmap.' : 'Hors VAYRIX V1 — sur notre feuille de route.',
+      items: [
+        isEn ? 'Multi-stop rides' : 'Courses multi-arrêts',
+        isEn ? 'Scheduled rides' : 'Courses planifiées',
+        isEn ? 'Preferred drivers' : 'Chauffeurs favoris',
+        isEn ? 'Loyalty program' : 'Programme fidélité',
+        isEn ? 'Group rides' : 'Courses groupées',
+        isEn ? 'Ride sharing' : 'Covoiturage',
+        isEn ? 'Low-connectivity services' : 'Services faible connectivité',
+        isEn ? 'SMS / USSD ordering' : 'Commande SMS / USSD',
+        isEn ? 'Advanced payments' : 'Paiements avancés',
+        isEn ? 'Corporate mobility' : 'Mobilité entreprise',
+        isEn ? 'Delivery expansion' : 'Extension livraison',
+        isEn ? 'AI mobility assistant' : 'Assistant mobilité IA',
+      ],
+    },
+    global: {
+      id: 'global',
+      label: isEn ? 'Global vision' : 'Vision globale',
+      title: isEn ? 'Born for Africa. Built for the world.' : 'Né en Afrique. Conçu pour le monde.',
+      desc: isEn
+        ? 'VAYRIX is building a mobility platform designed to scale across cities and countries — starting where we operate today and growing with ambition.'
+        : 'VAYRIX construit une plateforme de mobilité conçue pour s\'étendre entre villes et pays — en partant de là où nous opérons aujourd\'hui.',
+      phases: [
+        { title: isEn ? 'Africa' : 'Afrique', desc: isEn ? 'Deep roots, local payments, local trust.' : 'Ancrage local, paiements et confiance locales.' },
+        { title: isEn ? 'Expansion' : 'Expansion', desc: isEn ? 'City-by-city platform rollout.' : 'Déploiement ville par ville.' },
+        { title: isEn ? 'Global mobility' : 'Mobilité globale', desc: isEn ? 'One brand, scalable technology.' : 'Une marque, une technologie scalable.' },
+      ],
+    },
+    technology: {
+      id: 'technology',
+      label: isEn ? 'Technology' : 'Technologie',
+      title: isEn ? 'Built on modern infrastructure' : 'Construit sur une infra moderne',
+      items: [
+        { title: isEn ? 'Mobile apps' : 'Applications mobiles', desc: isEn ? 'Native client & driver experiences.' : 'Expériences client et chauffeur natives.' },
+        { title: isEn ? 'Real-time comms' : 'Communication temps réel', desc: isEn ? 'Instant updates between rider and driver.' : 'Mises à jour instantanées passager-chauffeur.' },
+        { title: 'GPS', desc: isEn ? 'Location accuracy for matching & safety.' : 'Précision pour matching et sécurité.' },
+        { title: isEn ? 'Cloud infrastructure' : 'Infrastructure cloud', desc: isEn ? 'Reliable, scalable backend.' : 'Backend fiable et évolutif.' },
+        { title: isEn ? 'Smart matching' : 'Matching intelligent', desc: isEn ? 'Pair riders with the right driver fast.' : 'Associer passager et chauffeur rapidement.' },
+        { title: isEn ? 'Secure auth' : 'Auth sécurisée', desc: isEn ? 'Protected accounts and sessions.' : 'Comptes et sessions protégés.' },
+        { title: isEn ? 'Data analytics' : 'Analytique', desc: isEn ? 'Operational insights for growth.' : 'Insights opérationnels pour la croissance.' },
+        { title: 'AI', desc: isEn ? 'Foundation for VAYRIX Intelligence.' : 'Fondation de VAYRIX Intelligence.' },
+      ],
+    },
+    stats: {
+      id: 'stats',
+      title: isEn ? 'Growing with every trip' : 'Grandir à chaque trajet',
+      note: isEn ? 'Demo metrics — replace with live data' : 'Indicateurs démo — remplaçables par des données réelles',
+      items: [
+        { value: '10K+', label: isEn ? 'Potential riders' : 'Passagers potentiels' },
+        { value: '2K+', label: isEn ? 'Driver network' : 'Réseau chauffeurs' },
+        { value: '50K+', label: isEn ? 'Trips completed' : 'Courses réalisées' },
+        { value: '24/7', label: isEn ? 'Mobility platform' : 'Plateforme mobilité' },
+      ],
+    },
+    download: {
+      id: 'download',
+      title: isEn ? 'Your next ride is just a tap away.' : 'Votre prochaine course à un tap.',
+      client: 'VAYRIX Client',
+      driver: 'VAYRIX Driver',
+      scan: isEn ? 'Scan to download' : 'Scannez pour télécharger',
+    },
+    testimonials: {
+      id: 'testimonials',
+      title: isEn ? 'Voices from the road' : 'Voix de la route',
+      items: [
+        { quote: isEn ? 'Booking is fast and I always see the price before I confirm. Exactly what I needed.' : 'La réservation est rapide et je vois toujours le prix avant de confirmer.', name: 'Amina K.', role: isEn ? 'Client · Douala' : 'Cliente · Douala', type: isEn ? 'Customer' : 'Client' },
+        { quote: isEn ? 'Clear requests, fair payments, and support when I need it. VAYRIX fits my daily work.' : 'Demandes claires, paiements justes, support quand il faut. VAYRIX suit mon rythme.', name: 'Jean-Paul M.', role: isEn ? 'Driver · Yaoundé' : 'Chauffeur · Yaoundé', type: isEn ? 'Driver' : 'Chauffeur' },
+        { quote: isEn ? 'We partner with platforms that scale responsibly. VAYRIX shares that vision.' : 'Nous travaillons avec des plateformes qui grandissent bien. VAYRIX partage cette vision.', name: 'Partnership Team', role: isEn ? 'Mobility partner' : 'Partenaire mobilité', type: isEn ? 'Partner' : 'Partenaire' },
+      ],
+    },
+    faq: {
+      id: 'faq',
+      title: 'FAQ',
+      items: [
+        { q: isEn ? 'What is VAYRIX?' : 'Qu\'est-ce que VAYRIX ?', a: isEn ? 'VAYRIX is a technology-driven mobility platform connecting riders and verified drivers with real-time tracking and flexible payments.' : 'VAYRIX est une plateforme de mobilité connectant passagers et chauffeurs vérifiés, avec suivi temps réel et paiements flexibles.' },
+        { q: isEn ? 'How do I book a ride?' : 'Comment réserver une course ?', a: isEn ? 'Download VAYRIX Client, set pickup and destination, choose a vehicle, confirm the displayed price, and request your ride.' : 'Téléchargez VAYRIX Client, définissez départ et destination, choisissez un véhicule, confirmez le prix affiché et demandez la course.' },
+        { q: isEn ? 'Which vehicles are available?' : 'Quels véhicules sont disponibles ?', a: isEn ? 'Motorcycle, standard car, premium car, van, and delivery — depending on your city.' : 'Moto, voiture standard, premium, van et livraison — selon votre ville.' },
+        { q: isEn ? 'How is the price calculated?' : 'Comment le prix est-il calculé ?', a: isEn ? 'Pricing reflects distance, vehicle type, and local conditions. You see the estimate before confirming in V1.' : 'Le prix reflète distance, type de véhicule et conditions locales. Vous voyez l\'estimation avant confirmation en V1.' },
+        { q: isEn ? 'Which payment methods are supported?' : 'Quels moyens de paiement ?', a: isEn ? 'Cash and Mobile Money are supported in VAYRIX V1.' : 'Espèces et Mobile Money sont pris en charge en VAYRIX V1.' },
+        { q: isEn ? 'How do I become a VAYRIX driver?' : 'Comment devenir chauffeur VAYRIX ?', a: isEn ? 'Install VAYRIX Driver, complete registration and verification, register your vehicle, then go online to receive requests.' : 'Installez VAYRIX Driver, inscrivez-vous, vérifiez vos documents, enregistrez votre véhicule, puis passez en ligne.' },
+        { q: isEn ? 'Is VAYRIX available in my city?' : 'VAYRIX est-il disponible dans ma ville ?', a: isEn ? 'We launch city by city. Contact support or check app availability for updates.' : 'Nous déployons ville par ville. Contactez le support ou consultez l\'app pour les mises à jour.' },
+        { q: isEn ? 'How does VAYRIX protect users?' : 'Comment VAYRIX protège-t-il les utilisateurs ?', a: isEn ? 'Verification, trip monitoring, secure accounts, and 24/7 support — see our Safety section.' : 'Vérifications, suivi des trajets, comptes sécurisés et support 24/7 — voir la section Sécurité.' },
+        { q: isEn ? 'What features are coming soon?' : 'Quelles fonctionnalités arrivent ?', a: isEn ? 'Multi-stop, scheduled rides, loyalty, USSD, and AI features are on the roadmap — marked Coming Soon on this site.' : 'Multi-arrêts, courses planifiées, fidélité, USSD et IA sont sur la feuille de route — marqués Bientôt sur ce site.' },
+      ],
+    },
+    contact: {
+      id: 'contact',
+      title: isEn ? 'Contact & support' : 'Contact & support',
+      subtitle: isEn ? 'We\'re here to help riders, drivers and partners.' : 'Nous aidons passagers, chauffeurs et partenaires.',
+      email: 'support@vayrix.com',
+      phone: '+237 6XX XXX XXX',
+      partnership: isEn ? 'Business partnership' : 'Partenariat entreprise',
+      send: isEn ? 'Send message' : 'Envoyer',
+      name: isEn ? 'Full name' : 'Nom complet',
+      message: isEn ? 'Message' : 'Message',
+    },
+    footer: {
+      tagline: isEn ? 'Smart mobility. Fast transportation. Technology-driven.' : 'Mobilité intelligente. Transport rapide. Piloté par la tech.',
+      nav: isEn ? 'Navigation' : 'Navigation',
+      legal: isEn ? 'Legal' : 'Légal',
+      apps: isEn ? 'Applications' : 'Applications',
+      privacy: isEn ? 'Privacy Policy' : 'Politique de confidentialité',
+      terms: isEn ? 'Terms of Service' : 'Conditions d\'utilisation',
+      cookies: isEn ? 'Cookie Policy' : 'Politique cookies',
+      rights: isEn ? 'All rights reserved' : 'Tous droits réservés',
+    },
+    badges: {
+      v1: isEn ? 'VAYRIX V1' : 'VAYRIX V1',
+      comingSoon: isEn ? 'Coming Soon' : 'Bientôt',
+    },
+  };
+}

@@ -23,6 +23,11 @@ const config: Config = {
         brand: {
           blue: '#3B6BFF',
           purple: '#7B5CFF',
+          cyan: '#00D4FF',
+          green: '#22C55E',
+          orange: '#FF9F43',
+          soft: '#F5F7FF',
+          ink: '#111827',
           bg: '#0A0E27',
           surface: '#141B3D',
           'surface-light': '#1E2A55',
@@ -85,6 +90,14 @@ const config: Config = {
           '0%, 100%': { opacity: '0.4' },
           '50%': { opacity: '0.8' },
         },
+        'map-drift': {
+          '0%, 100%': { transform: 'translate(0, 0)' },
+          '50%': { transform: 'translate(-6px, 4px)' },
+        },
+        'marker-pulse': {
+          '0%, 100%': { transform: 'scale(1)', opacity: '1' },
+          '50%': { transform: 'scale(1.08)', opacity: '0.85' },
+        },
         'accordion-down': {
           from: {
             height: '0',
@@ -107,6 +120,8 @@ const config: Config = {
         'fade-in': 'fade-in 0.5s ease-out forwards',
         'float': 'float 4s ease-in-out infinite',
         'pulse-glow': 'pulse-glow 3s ease-in-out infinite',
+        'map-drift': 'map-drift 8s ease-in-out infinite',
+        'marker-pulse': 'marker-pulse 2.5s ease-in-out infinite',
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
       },

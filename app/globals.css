@@ -78,4 +78,20 @@
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
+
+  .vayrix-gradient-text {
+    @apply bg-gradient-to-r from-brand-blue via-brand-purple to-brand-cyan bg-clip-text text-transparent;
+  }
+
+  .vayrix-section {
+    @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .vayrix-card {
+    @apply rounded-2xl border border-slate-200/80 bg-white shadow-sm shadow-slate-200/50 transition-all duration-300;
+  }
+
+  .vayrix-card-hover {
+    @apply hover:-translate-y-1 hover:border-brand-blue/20 hover:shadow-lg hover:shadow-brand-blue/10;
+  }
 }

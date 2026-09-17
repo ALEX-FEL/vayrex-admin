@@ -1,57 +1,69 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Menu, X, Globe, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useTranslations, type Locale } from '@/lib/i18n/use-translations';
+import { usePublicContent } from '@/lib/public-site/use-public-content';
+import { VayrixLogo } from '@/components/public/design/vayrix-logo';
+import { PrimaryButton } from '@/components/public/design/public-buttons';
 
 export function PublicNav() {
-  const { t, locale, changeLocale } = useTranslations();
+  const { locale, changeLocale } = useTranslations();
+  const c = usePublicContent();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   const links = [
-    { href: '/#features', label: t('nav.features') },
-    { href: '/#cities', label: t('nav.cities') },
-    { href: '/chauffeurs', label: t('nav.drivers') },
+    { href: '/#why', label: c.nav.solutions },
+    { href: '/#services', label: c.nav.services },
+    { href: '/#technology', label: c.nav.technology },
+    { href: '/#safety', label: c.nav.safety },
+    { href: '/#intelligence', label: c.nav.ai },
+    { href: '/#global', label: c.nav.about },
   ];
 
   return (
-    <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/5 bg-brand-bg/80 backdrop-blur-xl">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-2.5">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-r from-brand-blue to-brand-purple">
-            <svg viewBox="0 0 24 24" className="h-5 w-5 text-white" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18.4 8H5.6L4.5 11.1C3.7 11.3 3 12.1 3 13v3c0 .6.4 1 1 1h2" />
-              <circle cx="7.5" cy="17.5" r="2.5" />
-              <circle cx="16.5" cy="17.5" r="2.5" />
-            </svg>
-          </div>
-          <span className="text-lg font-bold tracking-tight text-white">Vayrix</span>
+    <header
+      className={cn(
+        'fixed left-0 right-0 top-0 z-50 transition-all duration-300',
+        scrolled
+          ? 'border-b border-slate-200/80 bg-white/90 shadow-sm shadow-slate-200/50 backdrop-blur-xl'
+          : 'bg-white/70 backdrop-blur-md',
+      )}
+    >
+      <div className="mx-auto flex h-[4.25rem] max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+        <Link href="/" className="shrink-0">
+          <VayrixLogo />
         </Link>
 
-        {/* Desktop nav */}
-        <nav className="hidden items-center gap-8 md:flex">
+        <nav className="hidden items-center gap-6 lg:flex xl:gap-8">
           {links.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm text-white/70 transition-colors hover:text-white"
+              className="text-sm font-medium text-slate-600 transition-colors hover:text-brand-blue"
             >
               {link.label}
             </Link>
           ))}
         </nav>
 
-        {/* Right side */}
-        <div className="flex items-center gap-3">
-          {/* Language selector */}
+        <div className="flex items-center gap-2 sm:gap-3">
           <div className="relative">
             <button
+              type="button"
               onClick={() => setLangOpen(!langOpen)}
-              className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm text-white/70 transition-colors hover:text-white"
+              className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm text-slate-600 transition-colors hover:bg-brand-soft hover:text-brand-ink"
             >
               <Globe className="h-4 w-4" />
               <span className="uppercase">{locale}</span>
@@ -59,16 +71,20 @@ export function PublicNav() {
             </button>
             {langOpen && (
               <div
-                className="absolute right-0 top-full mt-2 w-32 overflow-hidden rounded-lg border border-white/10 bg-brand-surface py-1"
+                className="absolute right-0 top-full mt-2 w-32 overflow-hidden rounded-xl border border-slate-200 bg-white py-1 shadow-lg"
                 onMouseLeave={() => setLangOpen(false)}
               >
                 {(['fr', 'en'] as Locale[]).map((l) => (
                   <button
                     key={l}
-                    onClick={() => { changeLocale(l); setLangOpen(false); }}
+                    type="button"
+                    onClick={() => {
+                      changeLocale(l);
+                      setLangOpen(false);
+                    }}
                     className={cn(
-                      'flex w-full items-center px-3 py-2 text-sm transition-colors hover:bg-white/5',
-                      locale === l ? 'text-white' : 'text-white/50',
+                      'flex w-full px-3 py-2 text-sm transition-colors hover:bg-brand-soft',
+                      locale === l ? 'font-medium text-brand-blue' : 'text-slate-600',
                     )}
                   >
                     {l === 'fr' ? 'Français' : 'English'}
@@ -78,58 +94,37 @@ export function PublicNav() {
             )}
           </div>
 
-          <Link
-            href="/admin237"
-            className="hidden rounded-lg border border-white/15 px-4 py-1.5 text-sm text-white/80 transition-colors hover:border-white/30 hover:text-white sm:block"
-          >
-            {t('nav.login')}
-          </Link>
+          <PrimaryButton href="#download" className="hidden px-4 py-2 text-sm sm:inline-flex">
+            {c.nav.downloadApp}
+          </PrimaryButton>
 
-          <Link
-            href="/chauffeurs"
-            className="hidden bg-gradient-to-r from-brand-blue to-brand-purple px-4 py-1.5 text-sm font-medium text-white rounded-lg transition-opacity hover:opacity-90 sm:block"
-          >
-            {t('nav.drivers')}
-          </Link>
-
-          {/* Mobile menu button */}
           <button
+            type="button"
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-white md:hidden"
+            className="flex h-10 w-10 items-center justify-center rounded-xl text-brand-ink hover:bg-brand-soft lg:hidden"
+            aria-label="Menu"
           >
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile menu */}
       {mobileOpen && (
-        <div className="border-t border-white/5 bg-brand-bg px-4 py-4 md:hidden">
-          <nav className="flex flex-col gap-3">
+        <div className="border-t border-slate-200 bg-white px-4 py-4 lg:hidden">
+          <nav className="flex flex-col gap-1">
             {links.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
-                className="text-sm text-white/70 transition-colors hover:text-white"
+                className="rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-brand-soft"
               >
                 {link.label}
               </Link>
             ))}
-            <Link
-              href="/admin237"
-              onClick={() => setMobileOpen(false)}
-              className="text-sm text-white/70 transition-colors hover:text-white"
-            >
-              {t('nav.login')}
-            </Link>
-            <Link
-              href="/chauffeurs"
-              onClick={() => setMobileOpen(false)}
-              className="mt-2 bg-gradient-to-r from-brand-blue to-brand-purple px-4 py-2 text-center text-sm font-medium text-white rounded-lg"
-            >
-              {t('nav.drivers')}
-            </Link>
+            <PrimaryButton href="#download" className="mt-3 w-full py-3" onClick={() => setMobileOpen(false)}>
+              {c.nav.downloadApp}
+            </PrimaryButton>
           </nav>
         </div>
       )}

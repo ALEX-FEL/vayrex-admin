@@ -3,9 +3,9 @@ import { PublicFooter } from './public-footer';
 
 export function PublicLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-brand-bg">
+    <div className="min-h-screen bg-white text-brand-ink antialiased">
       <PublicNav />
-      <main className="pt-16">{children}</main>
+      <main className="pt-[4.25rem]">{children}</main>
       <PublicFooter />
     </div>
   );
