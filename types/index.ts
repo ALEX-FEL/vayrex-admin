@@ -113,3 +113,19 @@ export interface AppSettings {
   sessionDuration: number;
   twoFactorAuth: boolean;
 }
+
+export type UserRole = 'ADMIN' | 'MANAGER' | 'DISPATCHER' | 'SUPPORT';
+export type UserStatus = 'ACTIF' | 'INACTIF';
+
+export interface User {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  role: UserRole;
+  status: UserStatus;
+  avatar: string;
+  createdAt: Date;
+  lastLogin: Date | null;
+}

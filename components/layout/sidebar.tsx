@@ -14,6 +14,7 @@ import {
   Zap,
   X,
   MapPin,
+  Shield,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -26,6 +27,7 @@ const navItems = [
   { href: '/payments', label: 'Paiements', icon: CreditCard },
   { href: '/vehicle-types', label: 'Types de véhicules', icon: Truck },
   { href: '/pricing', label: 'Tarification', icon: Zap },
+  { href: '/users', label: 'Utilisateurs', icon: Shield },
   { href: '/settings', label: 'Paramètres', icon: Settings },
 ];
 

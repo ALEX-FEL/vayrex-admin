@@ -1,0 +1,135 @@
+{
+  "nav": {
+    "home": "Home",
+    "features": "Features",
+    "cities": "Cities",
+    "drivers": "Drivers",
+    "download": "Get the app",
+    "login": "Admin area"
+  },
+  "hero": {
+    "badge": "Available in Douala & Yaoundé",
+    "title": "Your ride, your price, your route",
+    "subtitle": "Vayrix connects you with verified drivers. Negotiate your price, track your ride in real time, pay with Mobile Money.",
+    "ctaPrimary": "Request a ride",
+    "ctaSecondary": "Become a driver",
+    "stat1": "rides this month",
+    "stat2": "active drivers",
+    "stat3": "cities covered"
+  },
+  "howItWorks": {
+    "title": "How it works",
+    "subtitle": "Four steps, zero friction",
+    "steps": [
+      { "title": "Request your ride", "description": "Enter your pickup and destination. Choose your vehicle type." },
+      { "title": "Driver accepts", "description": "A verified driver nearby accepts your ride. You see their photo and rating." },
+      { "title": "Track in real time", "description": "Follow the route on the map. Know exactly when your driver arrives." },
+      { "title": "Pay with Mobile Money", "description": "Pay with MTN or Orange Money, or cash. Simple and secure." }
+    ]
+  },
+  "features": {
+    "title": "Built for Cameroon",
+    "subtitle": "Features designed for your reality, not copied from elsewhere",
+    "items": [
+      { "title": "Price negotiation", "description": "Propose the price you're willing to pay. The driver accepts or counter-offers. Total transparency." },
+      { "title": "Trust Mode", "description": "Share your trip live with loved ones. They track your arrival in real time." },
+      { "title": "Offline USSD mode", "description": "No data? No problem. Request a ride via USSD, even without a smartphone." },
+      { "title": "Mobile Money payment", "description": "MTN MoMo, Orange Money, or cash. Choose what works for you, pay in one tap." },
+      { "title": "Real-time tracking", "description": "See your driver approach on the map. Accurate arrival time estimates." },
+      { "title": "24/7 support", "description": "A question, an issue? Our local team responds in minutes, not days." }
+    ]
+  },
+  "cities": {
+    "title": "Where you are",
+    "subtitle": "Vayrix rides in your neighborhoods",
+    "items": [
+      { "name": "Douala", "status": "Available", "description": "Bonaprisso, Akwa, Bonanjo, Deido and more" },
+      { "name": "Yaoundé", "status": "Available", "description": "Bastos, City center, Mvan, Mokolo and more" },
+      { "name": "Bafoussam", "status": "Soon", "description": "Coming in 2026" },
+      { "name": "Garoua", "status": "Soon", "description": "Coming in 2026" }
+    ]
+  },
+  "testimonials": {
+    "title": "They ride with Vayrix",
+    "subtitle": "Real stories from the ground",
+    "items": [
+      { "name": "Aïcha N.", "role": "Trader, Douala", "content": "I always negotiate my price before leaving. No more arguments at payment time. Vayrix changed my rides.", "rating": 5 },
+      { "name": "Jean-Paul M.", "role": "Driver, Yaoundé", "content": "Before, I struggled to find clients. Now the app sends me rides all day. My income doubled.", "rating": 5 },
+      { "name": "Sarah K.", "role": "Student, Douala", "content": "Trust Mode reassures me. My parents see my trip live. They sleep peacefully.", "rating": 5 }
+    ]
+  },
+  "download": {
+    "title": "Download Vayrix",
+    "subtitle": "Available on Android and iOS. Request your first ride in under 2 minutes.",
+    "android": "Download on Google Play",
+    "ios": "Download on the App Store",
+    "qrText": "Scan to download"
+  },
+  "drivers": {
+    "heroTitle": "Drive for yourself",
+    "heroSubtitle": "Join hundreds of drivers boosting their income with Vayrix. You choose your hours, you keep 80% of every ride.",
+    "revenueTitle": "What you can earn",
+    "revenueSubtitle": "Real earnings, not promises",
+    "revenueItems": [
+      { "label": "Average weekly income", "value": "85,000 FCFA" },
+      { "label": "Top drivers weekly", "value": "180,000 FCFA" },
+      { "label": "Your share per ride", "value": "80%" },
+      { "label": "Minimum online time", "value": "None" }
+    ],
+    "requirementsTitle": "What you need",
+    "requirementsSubtitle": "Simple and accessible",
+    "requirements": [
+      "Valid driver's license (category A or B)",
+      "National ID card or passport",
+      "Vehicle in good condition (motorcycle or car)",
+      "Up-to-date registration and insurance",
+      "Smartphone with data connection",
+      "Mobile Money account (MTN or Orange)"
+    ],
+    "stepsTitle": "How to sign up",
+    "stepsSubtitle": "Three steps, you're driving in 48h",
+    "steps": [
+      { "title": "Download the app", "description": "Create your driver account in 5 minutes from your phone." },
+      { "title": "Submit documents", "description": "Photo of your license, ID, registration. We verify within 24h." },
+      { "title": "Start driving", "description": "Once approved, receive rides. Cash out your earnings via Mobile Money." }
+    ],
+    "ctaTitle": "Ready to start?",
+    "ctaSubtitle": "Join the Vayrix community today",
+    "ctaButton": "Become a driver"
+  },
+  "admin": {
+    "title": "Admin area",
+    "subtitle": "Secure login to the Vayrix platform",
+    "email": "Email address",
+    "emailPlaceholder": "admin@vayrix.cm",
+    "password": "Password",
+    "passwordPlaceholder": "••••••••",
+    "submit": "Sign in",
+    "loading": "Signing in...",
+    "errorInvalid": "Invalid email or password",
+    "errorGeneric": "An error occurred. Please try again.",
+    "backToSite": "Back to site",
+    "demoHint": "Demo: admin@vayrix.cm / vayrix2025"
+  },
+  "footer": {
+    "tagline": "Your ride, your price, your route.",
+    "product": "Product",
+    "company": "Company",
+    "support": "Support",
+    "legal": "Legal",
+    "privacy": "Privacy",
+    "terms": "Terms of service",
+    "contact": "Contact",
+    "help": "Help center",
+    "about": "About",
+    "careers": "Careers",
+    "blog": "Blog",
+    "rights": "All rights reserved"
+  },
+  "common": {
+    "soon": "Soon",
+    "available": "Available",
+    "learnMore": "Learn more",
+    "getStarted": "Get started"
+  }
+}

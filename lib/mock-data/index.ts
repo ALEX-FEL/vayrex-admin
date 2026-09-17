@@ -9,6 +9,8 @@ import type {
   Ride,
   RideStatus,
   VehicleType,
+  User,
+  UserRole,
 } from '@/types';
 
 faker.seed(42);
@@ -410,4 +412,55 @@ export function getTrafficData(): { drivers: DriverMapMarker[]; activeRides: Act
   });
 
   return { drivers: driverMarkers, activeRides: rideMapData };
+}
+
+// Users
+const userRoles: UserRole[] = ['ADMIN', 'MANAGER', 'DISPATCHER', 'SUPPORT'];
+
+export const users: User[] = Array.from({ length: 25 }, (_, i) => {
+  const firstName = faker.person.firstName();
+  const lastName = faker.person.lastName();
+  const createdAt = faker.date.between({ from: '2023-01-01', to: '2025-09-01' });
+  return {
+    id: `user-${i + 1}`,
+    firstName,
+    lastName,
+    email: faker.internet.email({ firstName, lastName }).toLowerCase(),
+    phone: `+225 0${faker.number.int({ min: 10000000, max: 99999999 })}`,
+    role: faker.helpers.weightedArrayElement([
+      { weight: 20, value: 'ADMIN' as const },
+      { weight: 30, value: 'MANAGER' as const },
+      { weight: 25, value: 'DISPATCHER' as const },
+      { weight: 25, value: 'SUPPORT' as const },
+    ]),
+    status: faker.helpers.weightedArrayElement([
+      { weight: 80, value: 'ACTIF' as const },
+      { weight: 20, value: 'INACTIF' as const },
+    ]),
+    avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=user${firstName}${i}`,
+    createdAt,
+    lastLogin: faker.datatype.boolean({ probability: 0.7 })
+      ? faker.date.between({ from: createdAt, to: new Date() })
+      : null,
+  };
+});
+
+export const userRoleLabels: Record<UserRole, string> = {
+  ADMIN: 'Administrateur',
+  MANAGER: 'Gestionnaire',
+  DISPATCHER: 'Dispatcheur',
+  SUPPORT: 'Support',
+};
+
+export function getUserStats() {
+  return {
+    total: users.length,
+    actifs: users.filter((u) => u.status === 'ACTIF').length,
+    inactifs: users.filter((u) => u.status === 'INACTIF').length,
+    parRole: userRoles.map((role) => ({
+      role,
+      label: userRoleLabels[role],
+      count: users.filter((u) => u.role === role).length,
+    })),
+  };
 }

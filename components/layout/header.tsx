@@ -16,6 +16,7 @@ const breadcrumbMap: Record<string, string> = {
   payments: 'Paiements',
   'vehicle-types': 'Types de véhicules',
   pricing: 'Tarification',
+  users: 'Utilisateurs',
   settings: 'Paramètres',
 };
 

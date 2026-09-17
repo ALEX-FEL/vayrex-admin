@@ -1,0 +1,180 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "features": "Fonctionnalités",
+    "cities": "Villes",
+    "drivers": "Chauffeurs",
+    "download": "Télécharger l'app",
+    "login": "Espace admin"
+  },
+  "hero": {
+    "badge": "Disponible à Douala & Yaoundé",
+    "title": "Ta course, ton prix, ton trajet",
+    "subtitle": "Vayrix te connecte à des chauffeurs vérifiés. Négocie ton prix, suis ton trajet en temps réel, paie en Mobile Money.",
+    "ctaPrimary": "Commander une course",
+    "ctaSecondary": "Devenir chauffeur",
+    "stat1": "courses ce mois",
+    "stat2": "chauffeurs actifs",
+    "stat3": "villes couvertes"
+  },
+  "howItWorks": {
+    "title": "Comment ça marche",
+    "subtitle": "Quatre étapes, zéro friction",
+    "steps": [
+      {
+        "title": "Commande ta course",
+        "description": "Saisis ton point de départ et ta destination. Choisis ton type de véhicule."
+      },
+      {
+        "title": "Le chauffeur accepte",
+        "description": "Un chauffeur vérifié à proximité accepte ta course. Tu vois sa photo et sa note."
+      },
+      {
+        "title": "Suis en temps réel",
+        "description": "Suis le trajet sur la carte. Sache exactement quand ton chauffeur arrive."
+      },
+      {
+        "title": "Paie en Mobile Money",
+        "description": "Règle en MTN ou Orange Money, ou en espèces. C'est simple et sécurisé."
+      }
+    ]
+  },
+  "features": {
+    "title": "Conçu pour le Cameroun",
+    "subtitle": "Des fonctionnalités pensées pour ta réalité, pas copiées d'ailleurs",
+    "items": [
+      {
+        "title": "Négociation de prix",
+        "description": "Propose le prix que tu es prêt à payer. Le chauffeur accepte ou contre-propose. Transparence totale."
+      },
+      {
+        "title": "Mode Confiance",
+        "description": "Partage ton trajet en direct avec tes proches. Ils suivent ton arrivée en temps réel."
+      },
+      {
+        "title": "Mode hors-ligne USSD",
+        "description": "Pas de data ? Pas de problème. Commande une course via USSD, même sans smartphone."
+      },
+      {
+        "title": "Paiement Mobile Money",
+        "description": "MTN MoMo, Orange Money, ou espèces. Choisis ce qui t'arrange, paie en un tap."
+      },
+      {
+        "title": "Suivi temps réel",
+        "description": "Vois ton chauffeur arriver sur la carte. Estimation précise de l'heure d'arrivée."
+      },
+      {
+        "title": "Support 7j/7",
+        "description": "Une question, un souci ? Notre équipe locale répond en minutes, pas en jours."
+      }
+    ]
+  },
+  "cities": {
+    "title": "Là où tu es",
+    "subtitle": "Vayrix roule dans tes quartiers",
+    "items": [
+      { "name": "Douala", "status": "Disponible", "description": "Bonaprisso, Akwa, Bonanjo, Deido et plus" },
+      { "name": "Yaoundé", "status": "Disponible", "description": "Bastos, Centre-ville, Mvan, Mokolo et plus" },
+      { "name": "Bafoussam", "status": "Bientôt", "description": "Arrivée prévue en 2026" },
+      { "name": "Garoua", "status": "Bientôt", "description": "Arrivée prévue en 2026" }
+    ]
+  },
+  "testimonials": {
+    "title": "Ils roulent avec Vayrix",
+    "subtitle": "Des histoires vraies du terrain",
+    "items": [
+      {
+        "name": "Aïcha N.",
+        "role": "Commerçante, Douala",
+        "content": "Je négocie toujours mon prix avant de partir. Fini les discussions au moment de payer. Vayrix a changé mes trajets.",
+        "rating": 5
+      },
+      {
+        "name": "Jean-Paul M.",
+        "role": "Chauffeur, Yaoundé",
+        "content": "Avant je galérais à trouver des clients. Maintenant l'app m'envoie des courses toute la journée. Mon revenu a doublé.",
+        "rating": 5
+      },
+      {
+        "name": "Sarah K.",
+        "role": "Étudiante, Douala",
+        "content": "Le Mode Confiance me rassure. Mes parents voient mon trajet en direct. Mes parents dorment tranquille.",
+        "rating": 5
+      }
+    ]
+  },
+  "download": {
+    "title": "Télécharge Vayrix",
+    "subtitle": "Disponible sur Android et iOS. Commande ta première course en moins de 2 minutes.",
+    "android": "Télécharger sur Google Play",
+    "ios": "Télécharger sur l'App Store",
+    "qrText": "Scanne pour télécharger"
+  },
+  "drivers": {
+    "heroTitle": "Roule pour toi-même",
+    "heroSubtitle": "Rejoins des centaines de chauffeurs qui augmentent leurs revenus avec Vayrix. Tu choisis tes horaires, tu gardes 80% de chaque course.",
+    "revenueTitle": "Ce que tu peux gagner",
+    "revenueSubtitle": "Des revenus réels, pas des promesses",
+    "revenueItems": [
+      { "label": "Revenu moyen / semaine", "value": "85 000 FCFA" },
+      { "label": "Top chauffeurs / semaine", "value": "180 000 FCFA" },
+      { "label": "Ta part par course", "value": "80%" },
+      { "label": "Temps minimum en ligne", "value": "Aucun" }
+    ],
+    "requirementsTitle": "Ce qu'il te faut",
+    "requirementsSubtitle": "Simple et accessible",
+    "requirements": [
+      "Permis de conduire valide (catégorie A ou B)",
+      "Carte nationale d'identité ou passeport",
+      "Véhicule en bon état (moto ou voiture)",
+      "Carte grise et assurance à jour",
+      "Smartphone avec connexion data",
+      "Compte Mobile Money (MTN ou Orange)"
+    ],
+    "stepsTitle": "Comment s'inscrire",
+    "stepsSubtitle": "Trois étapes, tu roules en 48h",
+    "steps": [
+      { "title": "Télécharge l'app", "description": "Crée ton compte chauffeur en 5 minutes depuis ton téléphone." },
+      { "title": "Envoie tes documents", "description": "Photo de ton permis, CNI, carte grise. On vérifie sous 24h." },
+      { "title": "Commence à rouler", "description": "Dès validation, reçois des courses. Encaisse tes gains en Mobile Money." }
+    ],
+    "ctaTitle": "Prêt à démarrer ?",
+    "ctaSubtitle": "Rejoins la communauté Vayrix aujourd'hui",
+    "ctaButton": "Devenir chauffeur"
+  },
+  "admin": {
+    "title": "Espace administrateur",
+    "subtitle": "Connexion sécurisée à la plateforme Vayrix",
+    "email": "Adresse email",
+    "emailPlaceholder": "admin@vayrix.cm",
+    "password": "Mot de passe",
+    "passwordPlaceholder": "••••••••",
+    "submit": "Se connecter",
+    "loading": "Connexion en cours...",
+    "errorInvalid": "Email ou mot de passe incorrect",
+    "errorGeneric": "Une erreur est survenue. Réessaie.",
+    "backToSite": "Retour au site",
+    "demoHint": "Démo : admin@vayrix.cm / vayrix2025"
+  },
+  "footer": {
+    "tagline": "Ta course, ton prix, ton trajet.",
+    "product": "Produit",
+    "company": "Entreprise",
+    "support": "Support",
+    "legal": "Mentions légales",
+    "privacy": "Confidentialité",
+    "terms": "Conditions d'utilisation",
+    "contact": "Contact",
+    "help": "Centre d'aide",
+    "about": "À propos",
+    "careers": "Recrutement",
+    "blog": "Blog",
+    "rights": "Tous droits réservés"
+  },
+  "common": {
+    "soon": "Bientôt",
+    "available": "Disponible",
+    "learnMore": "En savoir plus",
+    "getStarted": "Commencer"
+  }
+}
