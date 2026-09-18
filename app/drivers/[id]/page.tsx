@@ -137,7 +137,7 @@ function DocumentRow({ label, value, filename, status, onStatusChange }: Documen
 
 export default function DriverProfilePage() {
   const params = useParams();
-  const id = Array.isArray(params?.id) ? params.id[0] : params?.id;
+  const id = Array.isArray(params?.id) ? params.id[0] : params?.id ?? '';
   const driver = drivers.find((d) => d.id === id);
 
   const [docStatuses, setDocStatuses] = useState<Record<string, DocStatus>>({

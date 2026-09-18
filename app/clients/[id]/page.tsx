@@ -12,7 +12,7 @@ import { fr } from 'date-fns/locale';
 
 export default function ClientProfilePage() {
   const params = useParams();
-  const id = Array.isArray(params?.id) ? params.id[0] : params?.id;
+  const id = Array.isArray(params?.id) ? params.id[0] : params?.id ?? '';
   const client = clients.find((c) => c.id === id);
   if (!client) return <div className="p-5 text-center text-muted-foreground">Client non trouvé</div>;
 
