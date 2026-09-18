@@ -1,80 +1,60 @@
 'use client';
 
 import Link from 'next/link';
-import { usePublicContent } from '@/lib/public-site/use-public-content';
-import { VayrixLogo } from '@/components/public/design/vayrix-logo';
+import { useTranslations } from '@/lib/i18n/use-translations';
 
 export function PublicFooter() {
-  const c = usePublicContent();
-
-  const navLinks = [
-    { href: '/', label: 'Home' },
-    { href: '/#services', label: c.nav.services },
-    { href: '/#client', label: c.client.label },
-    { href: '/#driver', label: c.driver.label },
-    { href: '/#safety', label: c.nav.safety },
-    { href: '/#technology', label: c.nav.technology },
-    { href: '/#intelligence', label: 'VAYRIX Intelligence' },
-    { href: '/#coming-soon', label: c.comingSoon.badge },
-    { href: '/#contact', label: c.contact.title.split(' ')[0] },
-  ];
+  const { t } = useTranslations();
 
   return (
-    <footer className="border-t border-slate-200 bg-brand-soft">
-      <div className="vayrix-section py-14">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="space-y-4 sm:col-span-2 lg:col-span-1">
-            <VayrixLogo />
-            <p className="max-w-xs text-sm leading-relaxed text-slate-600">{c.footer.tagline}</p>
+    <footer className="border-t border-white/5 bg-brand-bg">
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="space-y-3">
+            <div className="flex items-center gap-2.5">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-r from-brand-blue to-brand-purple">
+                <svg viewBox="0 0 24 24" className="h-4 w-4 text-white" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18.4 8H5.6L4.5 11.1C3.7 11.3 3 12.1 3 13v3c0 .6.4 1 1 1h2" />
+                  <circle cx="7.5" cy="17.5" r="2.5" />
+                  <circle cx="16.5" cy="17.5" r="2.5" />
+                </svg>
+              </div>
+              <span className="text-base font-bold text-white">Vayrix</span>
+            </div>
+            <p className="text-sm text-white/40">{t('footer.tagline')}</p>
           </div>
 
           <div>
-            <h4 className="mb-4 text-xs font-semibold uppercase tracking-wider text-slate-400">{c.footer.nav}</h4>
-            <ul className="space-y-2.5">
-              {navLinks.map((link) => (
-                <li key={link.href + link.label}>
-                  <Link href={link.href} className="text-sm text-slate-600 transition-colors hover:text-brand-blue">
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
+            <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-white/30">{t('footer.product')}</h4>
+            <ul className="space-y-2">
+              <li><Link href="/#features" className="text-sm text-white/60 transition-colors hover:text-white">{t('nav.features')}</Link></li>
+              <li><Link href="/#cities" className="text-sm text-white/60 transition-colors hover:text-white">{t('nav.cities')}</Link></li>
+              <li><Link href="/chauffeurs" className="text-sm text-white/60 transition-colors hover:text-white">{t('nav.drivers')}</Link></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="mb-4 text-xs font-semibold uppercase tracking-wider text-slate-400">{c.footer.legal}</h4>
-            <ul className="space-y-2.5">
-              <li><span className="text-sm text-slate-600">{c.footer.privacy}</span></li>
-              <li><span className="text-sm text-slate-600">{c.footer.terms}</span></li>
-              <li><span className="text-sm text-slate-600">{c.footer.cookies}</span></li>
+            <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-white/30">{t('footer.company')}</h4>
+            <ul className="space-y-2">
+              <li><span className="text-sm text-white/60">{t('footer.about')}</span></li>
+              <li><span className="text-sm text-white/60">{t('footer.careers')}</span></li>
+              <li><span className="text-sm text-white/60">{t('footer.blog')}</span></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="mb-4 text-xs font-semibold uppercase tracking-wider text-slate-400">{c.footer.apps}</h4>
-            <ul className="space-y-2.5">
-              <li>
-                <Link href="/#download" className="text-sm text-slate-600 hover:text-brand-blue">
-                  {c.download.client}
-                </Link>
-              </li>
-              <li>
-                <Link href="/#download" className="text-sm text-slate-600 hover:text-brand-blue">
-                  {c.download.driver}
-                </Link>
-              </li>
-              <li>
-                <Link href="/chauffeurs" className="text-sm text-slate-600 hover:text-brand-blue">
-                  {c.driver.label}
-                </Link>
-              </li>
+            <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-white/30">{t('footer.support')}</h4>
+            <ul className="space-y-2">
+              <li><span className="text-sm text-white/60">{t('footer.help')}</span></li>
+              <li><span className="text-sm text-white/60">{t('footer.contact')}</span></li>
+              <li><span className="text-sm text-white/60">{t('footer.terms')}</span></li>
+              <li><span className="text-sm text-white/60">{t('footer.privacy')}</span></li>
             </ul>
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col gap-2 border-t border-slate-200/80 pt-8 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-xs text-slate-500">© {new Date().getFullYear()} VAYRIX. {c.footer.rights}.</p>
-          <p className="text-xs text-slate-400">Cameroon · Global mobility</p>
+        <div className="mt-10 border-t border-white/5 pt-6">
+          <p className="text-xs text-white/30">© 2025 Vayrix. {t('footer.rights')}.</p>
         </div>
       </div>
     </footer>
