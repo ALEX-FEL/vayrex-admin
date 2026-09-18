@@ -37,7 +37,7 @@ interface SidebarProps {
 }
 
 export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
-  const pathname = usePathname();
+  const pathname = usePathname() ?? '/';
 
   const handleNavClick = () => {
     if (onClose) onClose();

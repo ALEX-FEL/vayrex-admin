@@ -43,8 +43,8 @@ const statusOrder: Record<RideStatus, number> = {
 };
 
 export default function CourseDetailPage() {
-  const params = useParams();
-  const id = Array.isArray(params?.id) ? params.id[0] : params?.id ?? '';
+  const params = useParams<{ id?: string | string[] }>() ?? {};
+  const id = Array.isArray(params.id) ? params.id[0] : params.id ?? '';
   const ride = rides.find((r) => r.id === id);
   if (!ride) return <div className="p-5 text-center text-muted-foreground">Course non trouvée</div>;
 

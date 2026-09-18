@@ -25,7 +25,7 @@ interface HeaderProps {
 }
 
 export function Header({ onMenuClick }: HeaderProps) {
-  const pathname = usePathname();
+  const pathname = usePathname() ?? '/';
   const { theme, setTheme } = useTheme();
 
   const segments = pathname.split('/').filter(Boolean);
